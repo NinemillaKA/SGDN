@@ -1,0 +1,36 @@
+<?php
+
+use yii\helpers\Html;
+use yii\bootstrap\Modal;
+
+
+/* @var $this yii\web\View */
+/* @var $model backend\models\SgdnPrMaterialTp */
+
+$this->title = 'Update Sgdn Pr Material Tp: {nameAttribute}';
+$this->params['breadcrumbs'][] = ['label' => 'Sgdn Pr Material Tps', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->ID, 'url' => ['view', 'id' => $model->ID]];
+$this->params['breadcrumbs'][] = 'Update';
+?>
+<?php
+  Modal::begin([
+    'id' => 'update-modal',
+    'size' => 'modal-sm',
+    'header' => '<strong>Alterar tipo do Material</strong>',
+    'footer' => Html::button('<i class="fa fa-save"></i> Confirmar', ['onclick' => '$("#sgdn-pr-material-tp-form").submit();', 'class' => 'pull-right btn btn-flat btn-primary']),
+  ]);
+?>
+
+<div class="sgdn-pr-material-tp-update">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
+
+<?php
+  Modal::end();
+?>
+
+</div>
