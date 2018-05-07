@@ -33,11 +33,16 @@ use wbraganca\dynamicform\DynamicFormWidget;
                       <label for="idObservacao">Observação</label>
                       <?= $form->field($model, 'OBS')->textArea(['id'=>'idObservacao','placeholder' => 'Enter Observação...','rows'=> '4', 'maxlength' => true])->label(false) ?>
                   </div>
+                  <div class="col-md-4">
+                    <?php if(!$model->isNewRecord){
+                          echo $form->field($model, 'ESTADO')->dropDownList(["A"=>"ACTIVO", "I"=>"INACTIVO"],['prompt' =>'*** ESTADO ***', 'class'=>'form-control']);
+                          }
+                     ?>
+                  </div>
                 </div>
                 <div class="col-md-4">
                     <?php $img = ($model) ? '../../'.$model->URL_LOGO : '#' ; ?>
                     <div class="upload text-center" style="background: #f4f7fa; height: 210px; overflow: hidden; ">
-                      <!--img class="img-responsive" id="blah" src="<?= $img ?>" alt="" /-->
                         <?php echo Html::img('@web/'.$model->URL_LOGO, ['class' => 'img-responsive', 'id'=>'blah','style'=>'height: inherit !important;']); ?>
                         <div id="papelFundo">
                            <br><br><br><br>
@@ -47,15 +52,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
                       <i class="fa fa-trash" style="background: #fff; border-radius: 4px;" id="trashd"></i>
                     </div>
                     <?= $form->field($model, 'file')->fileInput(['onchange'=>'readURL(this)','id'=>"file",'accept' => 'image/*', 'class'=>'btn btn-default btn-block']) ?>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-md-4">
-                <?php if(!$model->isNewRecord){
-                      echo $form->field($model, 'ESTADO')->dropDownList(["A"=>"ACTIVO", "I"=>"INACTIVO"],['prompt' =>'--- Estado ---', 'class'=>'form-control']);
-                      }
-                 ?>
-              </div>
+                </div>
+
           </div>
       </div>
 </div>
@@ -100,7 +98,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                              </div>
                  <?php } ?>
                       <div class="col-md-12">
-                          <?= $form->field($model, 'OBS')->textArea(['id'=>'idObservacao','placeholder' => 'Enter Description','rows'=> '3', 'maxlength' => true])->label(false) ?>
+                          <?= $form->field($model, 'ENDERECO')->textArea(['id'=>'idObservacao','placeholder' => 'Enter Description','rows'=> '3', 'maxlength' => true])->label(false) ?>
                       </div>
                    </div>
             </div>
@@ -138,7 +136,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
               ?>
               <div class="item panel row " style="height: 40px; margin: 2px 0 0 0px">
                   <div class="col-md-4" style="height: 40px">
-                      <?=$form->field($contacto, "[{$i}]PR_CONTACTO_TP_ID")->label(FALSE)->dropDownList(ArrayHelper::map(SgdnPrContactoTp::find()->where(['ESTADO'=>'A'])->all(),'ID','DESIG'),['prompt'=>'---- Tipo ----'])?>
+                      <?=$form->field($contacto, "[{$i}]PR_CONTACTO_TP_ID")->label(FALSE)->dropDownList(ArrayHelper::map(SgdnPrContactoTp::find()->where(['ESTADO'=>'A'])->all(),'ID','DESIG'),['prompt'=>'*** TIPO ***'])?>
                   </div>
                   <div class="col-md-7" style="height: 40px">
                       <?= $form->field($contacto, "[{$i}]CONTACTO", [ 'inputOptions' => ['class' =>'contactos form-control','placeholder'=>'Entre um contato...']])->label(FALSE)->textInput(['maxlength'=>true])

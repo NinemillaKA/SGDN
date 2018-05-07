@@ -48,10 +48,29 @@ class SgdnEntidadeController extends Controller
     /*
     * dawnload request
     */
+
+    public function actionGetEntidade($id)
+    {
+          $model = $this->findModel($id);
+          echo $this->renderAjax('view_detalhes_entidade', [
+              'model' => $model,
+              'show_buttonOrLabel'=>false,
+          ],true);
+    }
+
     public function actionSampleDownload($filename)
     {
         ob_clean();
         \Yii::$app->response->sendFile($filename)->send();
+    }
+
+    public function actionSampleDisplay($filename)
+    {
+        ob_clean();
+        $filePath = '/web/doc/entidades/';
+        $filename = explode('/', $filename);
+        $completePath = Yii::getAlias('@app'.$filePath.'/'.$filename[2]);
+        Yii::$app->response->sendFile( $completePath,$filename[2],['inline'=>true]);
     }
 
     public function actionDroplistConselho($id)
@@ -264,7 +283,7 @@ class SgdnEntidadeController extends Controller
                      $generateRandomName = Yii::$app->security->generateRandomString().".{$ext}";
                      $dir = $file->saveAs('img/entidades/'.$generateRandomName);
                      $model->file = $generateRandomName;
-                     $model->URL_FOTO = 'img/entidades/'.$generateRandomName;
+                     $model->URL_LOGO = 'img/entidades/'.$generateRandomName;
               }
 
               $oldIDs = ArrayHelper::map($modelDocumentos, 'ID', 'ID');
@@ -295,13 +314,13 @@ class SgdnEntidadeController extends Controller
                                      $docfile = UploadedFile::getInstance($modelSgdnDocumento, "[$i]docfile");
                                      if($docfile){
                                          $generateRandomName = Yii::$app->security->generateRandomString(). '.' .$docfile->extension;
-                                         $modelSgdnDocumento->URL_DOCUMENTO = 'doc/pessoas/'.$generateRandomName;
-                                         $docfile->saveAs('doc/pessoas/'.$generateRandomName);
+                                         $modelSgdnDocumento->URL_DOCUMENTO = 'doc/entidades/'.$generateRandomName;
+                                         $docfile->saveAs('doc/entidades/'.$generateRandomName);
                                          echo "doc_upload_success";
-                                         // doc file don't save in his DI
+
                                      }
 
-                                     $modelSgdnDocumento->PESSOA_ID = $model->ID;
+                                     $modelSgdnDocumento->ENTIDADE_ID = $model->ID;
                                      if (! ($flag = $modelSgdnDocumento->save(false))) {
                                        print_r($modelSgdnDocumento->errors);
                                          $transaction->rollBack();

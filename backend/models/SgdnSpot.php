@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use \Faker\Provider\Uuid;
 
 /**
  * This is the model class for table "sgdn_spot".
@@ -13,6 +14,7 @@ use Yii;
  * @property string $DESIG
  * @property string $DESCR
  * @property string $URL_IMAGEM
+ * @property string $ENDERECO
  * @property string $DT_REGISTO
  * @property string $ESTADO
  *
@@ -33,7 +35,7 @@ class SgdnSpot extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public $file; 
+    public $file;
     public function rules()
     {
         return [
@@ -42,7 +44,7 @@ class SgdnSpot extends \yii\db\ActiveRecord
             [['ID'], 'string', 'max' => 36],
             [['GEOGRAFIA_ID'], 'string', 'max' => 50],
             [['CODIGO'], 'string', 'max' => 5],
-            [['DESIG'], 'string', 'max' => 300],
+            [['DESIG','ENDERECO'], 'string', 'max' => 300],
             [['DESCR'], 'string', 'max' => 2000],
             [['URL_IMAGEM'], 'string', 'max' => 128],
             [['ESTADO'], 'string', 'max' => 1],
@@ -64,6 +66,7 @@ class SgdnSpot extends \yii\db\ActiveRecord
             'DESIG' => 'Desig',
             'DESCR' => 'Descr',
             'URL_IMAGEM' => 'Url  Imagem',
+            'ENDERECO' => 'Endereco',
             'DT_REGISTO' => 'Dt  Registo',
             'ESTADO' => 'Estado',
         ];
@@ -77,13 +80,13 @@ class SgdnSpot extends \yii\db\ActiveRecord
         return $this->hasMany(SgdnRelEntidadeSpot::className(), ['SPOT_ID' => 'ID']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSgdnRelSpotEnderecos()
-    {
-        return $this->hasMany(SgdnRelSpotEndereco::className(), ['SPOT_ID' => 'ID']);
-    }
+    // /**
+    //  * @return \yii\db\ActiveQuery
+    //  */
+    // public function getSgdnRelSpotEnderecos()
+    // {
+    //     return $this->hasMany(SgdnRelSpotEndereco::className(), ['SPOT_ID' => 'ID']);
+    // }
 
     /**
      * @return \yii\db\ActiveQuery

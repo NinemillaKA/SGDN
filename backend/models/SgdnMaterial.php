@@ -14,6 +14,7 @@ use \Faker\Provider\Uuid;
  * @property string $DESIG
  * @property string $URL_LOGO
  * @property string $DESCR
+ * @property string $ESTADO_MATERIAL
  * @property string $DT_REGISTO
  * @property string $ESTADO
  *
@@ -38,13 +39,13 @@ class SgdnMaterial extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['MATERIAL_TP_ID','MATERIAL_MARCA_ID', 'CODIGO', 'DESIG'], 'required'],
+            [['MATERIAL_TP_ID','MATERIAL_MARCA_ID', 'ESTADO_MATERIAL', 'CODIGO', 'DESIG'], 'required'],
             [['DT_REGISTO'], 'safe'],
             [['ID', 'MATERIAL_TP_ID','MATERIAL_MARCA_ID', 'CODIGO'], 'string', 'max' => 36],
             [['DESIG'], 'string', 'max' => 350],
             [['URL_LOGO'], 'string', 'max' => 128],
             [['DESCR'], 'string', 'max' => 2000],
-            [['ESTADO'], 'string', 'max' => 1],
+            [['ESTADO_MATERIAL','ESTADO'], 'string', 'max' => 1],
             [['ID'], 'unique'],
             [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'checkExtensionByMimeType'=>false, 'maxFiles' => 1],
             [['MATERIAL_TP_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnPrMaterialTp::className(), 'targetAttribute' => ['MATERIAL_TP_ID' => 'ID']],
@@ -65,6 +66,7 @@ class SgdnMaterial extends \yii\db\ActiveRecord
             'DESIG' => 'Desig',
             'URL_LOGO' => 'Url  Logo',
             'DESCR' => 'Descr',
+            'ESTADO_MATERIAL' => 'Estado Material', 
             'DT_REGISTO' => 'Dt  Registo',
             'ESTADO' => 'Estado',
         ];

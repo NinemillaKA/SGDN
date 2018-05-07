@@ -3,7 +3,7 @@
 namespace backend\models;
 
 use Yii;
-
+use \Faker\Provider\Uuid;
 /**
  * This is the model class for table "sgdm_instrutor".
  *
@@ -30,10 +30,11 @@ class SgdmInstrutor extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
     public function rules()
     {
         return [
-            [['ID', 'PESSOA_ID', 'CODIGO', 'DT_REGISTO', 'ESTADO'], 'required'],
+            [['PESSOA_ID', 'CODIGO'], 'required'],
             [['DT_REGISTO'], 'safe'],
             [['ID', 'PESSOA_ID'], 'string', 'max' => 36],
             [['CODIGO'], 'string', 'max' => 5],
@@ -74,4 +75,20 @@ class SgdmInstrutor extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SgdnRelInstrutorModalidade::className(), ['INSTRUTOR_ID' => 'ID']);
     }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+
+            $this->ID = Uuid::uuid();
+            $this->DT_REGISTO = date('Y-m-d h:m:s');
+            $this->ESTADO = 'A';
+
+            return true;
+
+        }
+        return parent::beforeSave($insert);
+
+    }
+
 }

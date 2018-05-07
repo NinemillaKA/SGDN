@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnPrContactoTp */
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'id' => 'view-modal',
     'size' => 'modal-lg',
     'header' => '<strong>Registar tipo Contacto</strong>',
-    'footer' =>  Html::button('Close', ['onclick' => '$("#sgdn-pr-documento-tp-form").submit();', 'class' => 'btn btn-flat btn-danger', 'data-dismiss'=>'modal']),
+    'footer' =>  Html::button('Close', ['onclick' => '$("#sgdn-pr-documento-tp-form").submit(); ', 'class' => 'btn btn-flat btn-danger', 'data-dismiss'=>'modal']),
   ]);
 ?>
 
@@ -26,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
           <!-- <h1><!?= Html::encode($this->title) ?></h1> -->
 
           <p>
-              <?= Html::a('Update', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary btn btn-flat']) ?>
+              <?= Html::a('Update', '#', ['class' => 'btn btn-primary btn btn-flat', 'onclick' => 'update("' .Url::to(['update', 'id' => $model->ID]). '")', 'data-dismiss'=>'modal']) ?>
               <?= Html::a('Delete', ['delete', 'id' => $model->ID], [
                   'class' => 'btn btn-danger btn btn-flat',
                   'data' => [
@@ -57,3 +58,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
   Modal::end();
 ?>
+<script>
+
+// function showuUpdate(url)
+// {
+//     $("#view-modal").modal("hide");
+// }
+</script>

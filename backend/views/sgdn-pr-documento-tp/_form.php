@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'DESCR')->textInput(['maxlength' => true]) ?>
 
     <?php if (!$model->isNewRecord): ?>
-        <?= $form->field($model, 'ESTADO')->dropDownList(["A"=>"ACTIVO", "I"=>"INACTIVO"],['prompt' =>'--- ESTADO ---', 'class'=>'form-control']) ?>
+        <?= $form->field($model, 'ESTADO')->dropDownList(["A"=>"ACTIVO", "I"=>"INACTIVO"],['prompt' =>'*** ESTADO ***', 'class'=>'form-control']) ?>
     <?php endif; ?>
 
     <?php ActiveForm::end(); ?>

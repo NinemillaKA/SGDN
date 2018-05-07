@@ -3,7 +3,7 @@
 namespace backend\models;
 
 use Yii;
-
+use \Faker\Provider\Uuid;
 /**
  * This is the model class for table "sgdn_rel_entidade_spot".
  *
@@ -33,7 +33,7 @@ class SgdnRelEntidadeSpot extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ID', 'ENTIDADE_ID', 'SPOT_ID'], 'required'],
+            [['ENTIDADE_ID', 'SPOT_ID'], 'required'],
             [['DT_REGISTO'], 'safe'],
             [['ID', 'ENTIDADE_ID', 'SPOT_ID'], 'string', 'max' => 36],
             [['ESTADO'], 'string', 'max' => 1],
@@ -79,5 +79,17 @@ class SgdnRelEntidadeSpot extends \yii\db\ActiveRecord
     public function getSPOT()
     {
         return $this->hasOne(SgdnSpot::className(), ['ID' => 'SPOT_ID']);
+    }
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+          $this->ID = Uuid::uuid();
+          $this->DT_REGISTO = date('Y-m-d h:m:s');
+          $this->ESTADO = 'A';
+
+            return true;
+         }
+
+        return parent::beforeSave($insert);
     }
 }

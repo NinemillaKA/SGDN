@@ -30,6 +30,17 @@ return [
                 ],
             ],
         ],
+        'assetManager' => [
+            'bundles' => [
+                'dosamigos\google\maps\MapAsset' => [
+                    'options' => [
+                        'key' => 'AIzaSyBGyzGZY5UKVMPmRp2xVNKJ8XYKCFU9bbE',
+                        'language' => 'id',
+                        'version' => '3.1.18'
+                    ]
+                ]
+            ]
+        ],
     ],
     'params' => $params,
 ];

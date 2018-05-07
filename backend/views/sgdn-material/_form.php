@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\SgdnMaterial;
 use backend\models\SgdnPrMaterialTp;
+use backend\models\SgdnPrMaterialMarca;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnMaterial */
@@ -21,23 +22,40 @@ use backend\models\SgdnPrMaterialTp;
         <div class="box-body">
                <div class="row">
                       <div class="col-md-8">
-                          <div class="col-md-4">
-                                <?= $form->field($model, 'CODIGO')->textInput(['maxlength' => true, 'disabled'=>true]) ?>
+                          <div class="row">
+                              <div class="col-md-4">
+                                    <?= $form->field($model, 'CODIGO')->textInput(['maxlength' => true, 'disabled'=>true]) ?>
+                              </div>
+                              <div class="col-md-6">
+                                    <?= $form->field($model, 'DESIG')->textInput(['maxlength' => true]) ?>
+                              </div>
                           </div>
-                          <div class="col-md-6">
-                                <?= $form->field($model, 'DESIG')->textInput(['maxlength' => true]) ?>
+
+                          <div class="row">
+                              <div class="col-md-4">
+                                    <?= $form->field($model, 'MATERIAL_TP_ID')->textInput(['maxlength' => true])->dropDownList(ArrayHelper::map(SgdnPrMaterialTp::find()->where(['ESTADO'=>'A'])->all(),'ID','DESIG'),['prompt'=>'*** TIPO ***'])->label('TIPO')?>
+                              </div>
+                              <div class="col-md-3">
+                                    <?= $form->field($model, 'MATERIAL_MARCA_ID')->textInput(['maxlength' => true])->dropDownList(ArrayHelper::map(SgdnPrMaterialMarca::find()->where(['ESTADO'=>'A'])->all(),'ID','DESIG'),['prompt'=>'*** MARCA ***'])->label('MARCA')?>
+                              </div>
+                              <div class="col-md-3">
+                                    <?= $form->field($model, 'ESTADO_MATERIAL')->textInput(['maxlength' => true])->dropDownList(['G'=>'BOM', 'W'=>'ADVERTENCIA', 'B'=>'MAU' ],['prompt' => '*** ESTADO ***'])?>
+                              </div>
                           </div>
-                          <div class="col-md-5">
-                                <?= $form->field($model, 'MATERIAL_TP_ID')->textInput(['maxlength' => true])->dropDownList(ArrayHelper::map(SgdnPrMaterialTp::find()->where(['ESTADO'=>'A'])->all(),'ID','DESIG'),['prompt'=>'*** TIPO ***'])->label('MARCA')?>
+
+                          <div class="row">
+                              <div class="col-md-10" style="margin-top: 10px;">
+                                    <?= $form->field($model, 'DESCR')->textArea(['id'=>'idObservacao','placeholder' => 'Enter Observação...','rows'=> '4', 'maxlength' => true])->label(false) ?>
+                              </div>
                           </div>
-                          <div class="col-md-10" style="margin-top: 10px;">
-                                <?= $form->field($model, 'DESCR')->textArea(['id'=>'idObservacao','placeholder' => 'Enter Observação...','rows'=> '4', 'maxlength' => true])->label(false) ?>
-                          </div>
+
+
+
 
                       </div>
                       <div class="col-md-4">
                           <?php $img = ($model) ? '../../'.$model->URL_LOGO : '#' ; ?>
-                          <div class="upload text-center" style="background: #f4f7fa; border: 5px solid #DCDCDC; height:264px; width: 213px; overflow: hidden;'width:100% !important; ">
+                          <div class="upload text-center" style="background: #f4f7fa; border: 1px solid #DCDCDC; height:264px; width: 213px; overflow: hidden;'width:100% !important; ">
                             <!--img class="img-responsive" style="height: inherit !important;" id="blah" src="<?= $img ?>" alt="" /-->
                               <?php echo Html::img('@web/'.$model->URL_LOGO, ['class' => 'img-responsive', 'id'=>'blah','style'=>'height: inherit !important;']); ?>
                               <div id="papelFundo">

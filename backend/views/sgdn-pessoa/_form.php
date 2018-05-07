@@ -27,44 +27,41 @@ use wbraganca\dynamicform\DynamicFormWidget;
       </div>
       <div class="box-body">
           <div class="col-md-8">
-            <div class="rows">
-              <div class="col-md-8">
-                  <?= $form->field($model, 'NOME' )->textInput(['placeholder' => 'Enter Nome', 'maxlength' => true,])->label('Nome')?>
-              </div>
-            </div>
-            <div class="rows">
-
-              <div class="rows">
-                <div class="col-md-4">
-                  <?= $form->field($model, 'SEXO')->dropdownList(['placeholder' =>'-- Sexo --' , 'F' =>'Female', 'M' => 'Male'])->label('Sexo') ?>
-                </div>
-              </div>
-
-            </div>
-            <div class="rows">
-              <div class="col-md-4">
-                <!-- <-?= $form->field($model, 'PR_ESTADO_CIVIL_ID')->dropdownList(['placeholder' =>'-- Estado Civil --'  ,'C' => 'Casado', 'S' => 'Solteiro'])->label('Estado Civil') ?> -->
-                <?=$form->field($model, 'PR_ESTADO_CIVIL_ID')->label('Estado Civil')->dropDownList(ArrayHelper::map(SgdnPrEstadoCivil::find()->where(['ESTADO'=>'A'])->all(),'ID','DESIG'),['prompt'=>'---- Tipo ----'])?>
-
-              </div>
-            </div>
-              <div class="col-md-4">
-              </div>
-
-
-            <div class="col-md-4">
-                <?= $form->field($model, 'DT_NASC')->widget(
-                              DatePicker::className(), [
-                                 'template' => '{addon}{input}',
-                                'clientOptions' => [
-                                      'autoclose' => true,
-                                      'format' => 'dd-mm-yyyy'
-                                  ]
-                          ]);?>
-              </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <?= $form->field($model, 'NOME' )->textInput(['placeholder' => 'Enter Nome', 'maxlength' => true,])->label('Nome')?>
+                    </div>
+                </div><br>
+                <div class="row">
+                      <div class="col-md-4">
+                          <?= $form->field($model, 'SEXO')->dropdownList(['placeholder' =>'-- Sexo --' , 'F' =>'Female', 'M' => 'Male'])->label('Sexo') ?>
+                      </div>
+                      <div class="col-md-4">
+                          <?=$form->field($model, 'PR_ESTADO_CIVIL_ID')->label('Estado Civil')->dropDownList(ArrayHelper::map(SgdnPrEstadoCivil::find()->where(['ESTADO'=>'A'])->all(),'ID','DESIG'),['prompt'=>'*** TIPO ***'])?>
+                      </div>
+                      <div class="col-md-4">
+                      <?= $form->field($model, 'DT_NASC')->widget(
+                                    DatePicker::className(), [
+                                       'template' => '{addon}{input}',
+                                      'clientOptions' => [
+                                            'autoclose' => true,
+                                            'format' => 'dd-mm-yyyy'
+                                        ]
+                                ]);?>
+                      </div>
+               </div>
+               <div class="row">
+                   <div class="col-md-4">
+                     <?php if(!$model->isNewRecord){
+                           echo $form->field($model, 'ESTADO')->dropDownList(["A"=>"ACTIVO", "I"=>"INACTIVO"],['prompt' =>'*** ESTADO ***', 'class'=>'form-control']);
+                        }
+                      ?>
+                   </div>
+               </div>
+          </div>
 
 <!--  lOGO-imagem -->
-            </div>
+          <!-- </div> -->
             <div class="col-md-4">
                 <?php $img = ($model) ? '../../'.$model->URL_FOTO : '#' ; ?>
                 <div class="upload text-center" style="background: #f4f7fa; height: 170px; width: 170px; overflow: hidden;'style' => 'width:100% !important; ">
@@ -93,21 +90,29 @@ use wbraganca\dynamicform\DynamicFormWidget;
                            $conselho = $model->lOCALIDADE->CONCELHO;
                            $ilha = $model->lOCALIDADE->ILHA;
                            ?>
-                          <div class="col-md-3">
-                              <label>Ilha</label>
-                              <?= Html::dropDownList('LOCALIDADE_ID_ilha', $ilha, ArrayHelper::map(GlbGeografia::find()->where(['NIVEL_DETALHE'=>'2','PAIS'=>'238'])->all(),'ID','NOME'),['prompt'=>'*** Ilha ***','Onchange'=>'getListConselho(this.value);','id'=>'selectIlha', 'class'=>'form-control']) ?>
+                          <div class="row">
+                              <div class="col-md-3">
+                                  <label>Ilha</label>
+                                  <?= Html::dropDownList('LOCALIDADE_ID_ilha', $ilha, ArrayHelper::map(GlbGeografia::find()->where(['NIVEL_DETALHE'=>'2','PAIS'=>'238'])->all(),'ID','NOME'),['prompt'=>'*** Ilha ***','Onchange'=>'getListConselho(this.value);','id'=>'selectIlha', 'class'=>'form-control']) ?>
+                              </div>
+                              <div class="col-md-3">
+                                  <label>Concelho</label>
+                                  <?= Html::dropDownList('LOCALIDADE_ID_conselho', $conselho, ArrayHelper::map(GlbGeografia::find()->where(['NIVEL_DETALHE' => '3','PAIS'=>'238','ILHA'=>$ilha])->all(),'ID','NOME'),['prompt'=>'*** Concelho ***','Onchange'=>'getListFreguesia(this.value);','id'=>'selectConcelho', 'class'=>'form-control']) ?>
+                              </div>
+                              <div class="col-md-3">
+                                  <label>Freguesia</label>
+                                  <?= Html::dropDownList('LOCALIDADE_ID_freguesia', $freguesia, ArrayHelper::map(GlbGeografia::find()->where(['NIVEL_DETALHE' => '4','PAIS'=>'238','CONCELHO'=>$conselho])->all(),'ID','NOME'),['prompt'=>'*** Freguesia ***','Onchange'=>'getListZona(this.value);','id'=>'selectFreguesia', 'class'=>'form-control']) ?>
+                              </div>
+                              <div class="col-md-3">
+                                  <?= $form->field($model, 'LOCALIDADE_ID')->label('Zona')->dropDownList(ArrayHelper::map(GlbGeografia::find()->where(['NIVEL_DETALHE'=>'5','PAIS'=>'238','FREGUESIA'=>$freguesia])->all(),'ID','NOME'),['prompt'=>'*** Zona ***'])?>
+                              </div>
                           </div>
-                          <div class="col-md-3">
-                              <label>Concelho</label>
-                              <?= Html::dropDownList('LOCALIDADE_ID_conselho', $conselho, ArrayHelper::map(GlbGeografia::find()->where(['NIVEL_DETALHE' => '3','PAIS'=>'238','ILHA'=>$ilha])->all(),'ID','NOME'),['prompt'=>'*** Concelho ***','Onchange'=>'getListFreguesia(this.value);','id'=>'selectConcelho', 'class'=>'form-control']) ?>
+                          <div class="row">
+                              <div class="col-md-12">
+                                  <?= $form->field($model, 'MORADA')->textArea(['id'=>'idObservacao','placeholder' => 'Enter Description','rows'=> '3', 'maxlength' => true])->label(false) ?>
+                              </div>
                           </div>
-                          <div class="col-md-3">
-                              <label>Freguesia</label>
-                              <?= Html::dropDownList('LOCALIDADE_ID_freguesia', $freguesia, ArrayHelper::map(GlbGeografia::find()->where(['NIVEL_DETALHE' => '4','PAIS'=>'238','CONCELHO'=>$conselho])->all(),'ID','NOME'),['prompt'=>'*** Freguesia ***','Onchange'=>'getListZona(this.value);','id'=>'selectFreguesia', 'class'=>'form-control']) ?>
-                          </div>
-                          <div class="col-md-3">
-                              <?= $form->field($model, 'LOCALIDADE_ID')->label('Zona')->dropDownList(ArrayHelper::map(GlbGeografia::find()->where(['NIVEL_DETALHE'=>'5','PAIS'=>'238','FREGUESIA'=>$freguesia])->all(),'ID','NOME'),['prompt'=>'*** Zona ***'])?>
-                          </div>
+
                    <?php }else{ ?>
                           <div class="row">
                           <div class="col-md-6">
@@ -132,10 +137,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                   </div>
                               </div>
                            </div>
+                           <div class="row">
+                               <div class="col-md-12">
+                                   <?= $form->field($model, 'MORADA')->textArea(['id'=>'idObservacao','placeholder' => 'Enter Description','rows'=> '3', 'maxlength' => true])->label(false) ?>
+                               </div>
+                           </div>
                      <?php } ?>
-                     <div class="col-md-12">
-                         <?= $form->field($model, 'MORADA')->textArea(['id'=>'idObservacao','placeholder' => 'Enter Description','rows'=> '3', 'maxlength' => true])->label(false) ?>
-                     </div>
+
                  </div>
             </div>
        </div>
@@ -174,7 +182,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                   ?>
                   <div class="item panel row " style="height: 40px; margin: 2px 0 0 0px">
                       <div class="col-md-4" style="height: 40px">
-                          <?= $form->field($contacto, "[{$i}]PR_CONTACTO_TP_ID")->label(FALSE)->dropDownList(ArrayHelper::map(SgdnPrContactoTp::find()->where(['ESTADO'=>'A'])->all(),'ID','DESIG'),['prompt'=>'---- Tipo ----'])
+                          <?= $form->field($contacto, "[{$i}]PR_CONTACTO_TP_ID")->label(FALSE)->dropDownList(ArrayHelper::map(SgdnPrContactoTp::find()->where(['ESTADO'=>'A'])->all(),'ID','DESIG'),['prompt'=>'*** Tipo ***'])
                           ?>
                       </div>
                       <div class="col-md-7" style="height: 40px">

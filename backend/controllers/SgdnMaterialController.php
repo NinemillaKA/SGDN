@@ -106,11 +106,20 @@ class SgdnMaterialController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+        $file = UploadedFile::getInstance($model, 'file');
+        if($file){
+            $generateRandomName = Yii::$app->security->generateRandomString(). '.' .$file->extension;
+            $model->URL_LOGO = 'img/materiais/'.$generateRandomName;
+            $file->saveAs('img/materiais/'.$generateRandomName);
         }
 
+        if ($model->load(Yii::$app->request->post()) ){
+
+              if($model->save()){
+                  return $this->redirect(['view', 'id' => $model->ID]);
+              }
+
+        }
         return $this->render('update', [
             'model' => $model,
         ]);

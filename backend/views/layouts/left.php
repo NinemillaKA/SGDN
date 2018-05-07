@@ -31,43 +31,50 @@
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
                     ['label' => 'Menu Navegation', 'options' => ['class' => 'header']],
+                      ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/']],
                       [
                         'label' => 'Parametrizacao',
                         'icon' => 'fal fa-cog',
                         'url' => ['/'],
                               'items' => [
-                                            ['label' => 'Contatos', 'icon'     => 'fal fa-envelope', 'url' => ['/sgdn-pr-contacto-tp'],],
-                                            ['label' => 'Documentos', 'icon'   => 'fal fa-file-pdf-o', 'url' => ['/sgdn-pr-documento-tp'],],
-                                            ['label' => 'Estado Civil', 'icon' => 'fal fa-street-view', 'url' => ['/sgdn-pr-estado-civil'],],
+
+                                          [
+                                            'label' => 'Informacional',
+                                            'icon' => 'fal  fa-info-circle',
+                                            'url' => ['/'],
+                                                  'items' => [
+                                                                  ['label' => 'Contatos', 'icon'     => 'fal fa-envelope', 'url' => ['/sgdn-pr-contacto-tp'],],
+                                                                  ['label' => 'Documentos', 'icon'   => 'fal fa-file-pdf-o', 'url' => ['/sgdn-pr-documento-tp'],],
+                                                                  ['label' => 'Estado Civil', 'icon' => 'fal fa-street-view', 'url' => ['/sgdn-pr-estado-civil'],],
+                                                   ]
+                                           ],
+
+
+                                            [
+                                              'label' => 'Materiais',
+                                              'icon' => 'fal fa-wrench',
+                                              'url' => ['/'],
+                                                    'items' => [
+                                                                  ['label' => 'Tipos', 'icon'    => 'fal fa-question', 'url' => ['/sgdn-pr-material-tp'],],
+                                                                  ['label' => 'Marcas', 'icon'    => 'fal fa-slack', 'url' => ['/sgdn-pr-material-marca'],],
+                                                                  ['label' => 'Preciario', 'icon'    => 'fal fa-money', 'url' => ['/'],],
+                                                     ]
+                                             ],
                                ]
                        ],
 
-                       [
-                         'label' => 'Parametrizacao Materiais',
-                         'icon' => 'fal fa-cog',
-                         'url' => ['/'],
-                               'items' => [
-                                             ['label' => 'Tipos', 'icon'    => 'fal fa-question', 'url' => ['/sgdn-pr-material-tp'],],
-                                             ['label' => 'Marcas', 'icon'    => 'fal fa-slack', 'url' => ['/sgdn-pr-material-marca'],],
-                                             ['label' => 'Preciario', 'icon'    => 'fal fa-money', 'url' => ['/'],],
-                                ]
-                        ],
+                     [
+                       'label' => 'Pessoas', 'icon' => 'fab fa-group','url' => ['/sgdn-pessoa'],
+                     ],
+                     [
+                         'label' => 'Spots',
+                         'icon' => 'fab fa-anchor',
+                         'url' => ['/sgdn-spot'],
 
-                    ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/']],
+                     ],
+
                     [
                       'label' => 'Entidades', 'icon' => 'fal fa-home', 'url' => ['/sgdn-entidade'],
-                      // 'items' => [
-                      //   ['label' => 'Create', 'icon' => 'fal fa-circle-o text-blue', 'url' => ['#'],],
-                      //   ['label' => 'Read', 'icon' => 'fal fa-circle-o text-green', 'url' => ['#'],],
-                      //   ['label' => 'Update', 'icon' => 'fal fa-circle-o text-yellow', 'url' => ['#'],],
-                      //   ['label' => 'Delete', 'icon' => 'fal fa-circle-o text-red', 'url' => ['#'],],
-                      //
-                      // ],
-                    ],
-                    [
-                      'label' => 'Pessoas',
-                      'icon' => '/*fa-user*/ fa-group',
-                      'url' => ['/sgdn-pessoa'],
                     ],
 
                     [
@@ -79,13 +86,6 @@
                             'label' => 'Materiais',
                             'icon' => 'fal fa-wrench',
                             'url' =>  ['/sgdn-material'],
-                            // 'items' => [
-                            //                 ['label' => 'Create', 'icon' => 'fal fa-circle-o text-blue', 'url' => ['#'],],
-                            //                 ['label' => 'Read', 'icon' => 'fal fa-circle-o text-green', 'url' => ['#'],],
-                            //                 ['label' => 'Update', 'icon' => 'fal fa-circle-o text-yellow', 'url' => ['#'],],
-                            //                 ['label' => 'Delete', 'icon' => 'fal fa-circle-o text-red', 'url' => ['#'],],
-                            // ]
-
                           ],
                         ],
                      ],
@@ -93,79 +93,34 @@
                      [
                        'label' => 'Escola',
                        'icon' => 'fab fa-bank',
-                       'url' => '#',
+                       'url' => ['/'],
 
                           'items' => [
+
+                              ['label' => 'Spots','icon' => 'fab fa-anchor','url' => ['/sgdn-rel-entidade-spot'],                        ],
                               [
                                 'label' => 'Modalidades',
                                 'icon' => 'fal fa-xing',
-                                'url' => '#',
-                                'items' => [
-                                              ['label' => 'Surf', 'icon' => 'fal fa-circle-o text-blue', 'url' => ['#'],],
-                                              ['label' => 'BodyBoard ', 'icon' => 'fal fa-circle-o text-blue', 'url' => ['#'],],
-                                              ['label' => 'KitSurf', 'icon' => 'fal fa-circle-o ', 'url' => ['#'],],
-                                              ['label' => 'WindSurf', 'icon' => 'fal fa-circle-o ', 'url' => ['#'],],
-                                ],
+                                'url' => ['/sgdn-pr-modalidade'],
                               ],
-                              ['label' => 'Aulas','icon' => 'fab fa-leanpub','url' => ['#'],],
-                              ['label' => 'Calendar','icon' => 'fal fa-calendar','url' => ['#'],],
+                              ['label' => 'Aulas','icon' => 'fab fa-leanpub','url' => ['/sgdn-rel-aula'],],
+                              ['label' => 'Calendar','icon' => 'fal fa-calendar','url' => ['/calendar.php'],],
                              ],
                       ],
 
                       [
-                          'label' => 'Spots',
-                          'icon' => '/*fab fa-spotify*/  fa-anchor',
-                          'url' => '#',
-                          // 'items' => [
-                          //               ['label' => 'Create', 'icon' => 'fal fa-circle-o text-blue', 'url' => ['#'],],
-                          //               ['label' => 'Read', 'icon' => 'fal fa-circle-o text-green', 'url' => ['#'],],
-                          //               ['label' => 'Update', 'icon' => 'fal fa-circle-o text-yellow', 'url' => ['#'],],
-                          //               ['label' => 'Delete', 'icon' => 'fal fa-circle-o text-red', 'url' => ['#'],],
-                          // ],
-                      ],
-                      [
-                          'label' => 'Front Office',
+                          'label' => 'Office',
                           'icon' => ' far fa-building',
                           'url' => '#',
                           'items' => [
-                                        ['label' => 'Registo de Matricula', 'icon' => 'far fa-registered', 'url' => ['#'],],
+                                        ['label' => 'Cadastro', 'icon' => 'far  fa-plus-circle', 'url' => ['/sgdm-instrutor'],],
+                                        ['label' => 'Matricula', 'icon' => 'far fa-money', 'url' => ['#'],],
+                                        ['label' => 'Contracto', 'icon' => 'far fa-scissors', 'url' => ['/sgdn-rel-instrutor-modalidade'],],
                                         ['label' => 'Emprestimo','icon' => 'fal fa-exchange', 'url' => ['#'],],
                                         ['label' => 'Alojamento','icon' => 'fal fa-home', 'url' => ['#'],],
-                                        //['label' => 'Update', 'icon' => 'fal fa-circle-o text-yellow', 'url' => ['#'],],
-                                        //['label' => 'Delete', 'icon' => 'fal fa-circle-o text-red', 'url' => ['#'],],
                           ],
                       ],
 
-                    /*['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
-                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],*/
-                    //['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
-                    /*[
-                        'label' => 'Some tools',
-                        'icon' => 'share',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],]///,
-                            /*[
-                                'label' => 'Level One',
-                                'icon' => 'circle-o',
-                                'url' => '#',
-                                'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
-                                    [
-                                        'label' => 'Level Two',
-                                        'icon' => 'circle-o',
-                                        'url' => '#',
-                                        'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    */
                 ],
             ]
         ) ?>

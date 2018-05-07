@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use backend\models\SgdmInstrutor;
 use app\models\Model;
 use yii\web\UploadedFile;
 
@@ -36,6 +37,28 @@ class SgdnPessoaController extends Controller
         ];
     }
 
+
+
+    /**
+     * devolve pessoa request ajax, instrutor.
+     */
+    public function actionGetPessoa($id)
+    {
+          $model = $this->findModel($id);
+          echo $this->renderAjax('view_detalhes_pessoa', [
+              'model' => $model,
+              'show_buttonOrLabel'=>false,
+          ],true);
+    }
+    public function actionGetPessoa1($id)
+    {
+          $model = SgdmInstrutor::findOne($id)->pESSOA;
+          echo $this->renderAjax('view_detalhes_pessoa', [
+              'model' => $model,
+              'show_buttonOrLabel'=>false,
+          ],true);
+    }
+
     /**
     * recebe pedido para fazer download ficheiro do formulário
     **/
@@ -44,6 +67,18 @@ class SgdnPessoaController extends Controller
         ob_clean();
         \Yii::$app->response->sendFile($filename)->send();
     }
+
+    public function actionSampleDisplay($filename)
+    {
+         ob_clean();
+         $filePath = '/web/doc/pessoas/';
+         $filename = explode("/", $filename);
+
+        // Might need to change '@app' for another alias
+        $completePath = Yii::getAlias('@app'.$filePath.'/'.$filename[2]);
+        Yii::$app->response->sendFile( $completePath,$filename[2],['inline'=>true]);
+    }
+
 
 
     public function actionDroplistConselho($id)
@@ -54,7 +89,7 @@ class SgdnPessoaController extends Controller
             ->where(['ILHA' => $id, 'NIVEL_DETALHE'=>'3'])
             ->all();
 
-        echo '<option value="">*** Selecione Concelho ***</option>';
+       echo '<option value="">*** Selecione Concelho ***</option>';
 
        foreach ($rows as $row) {
                echo '<option value="'.$row['ID'].'">'.$row['NOME'].'</option>';
@@ -116,9 +151,11 @@ class SgdnPessoaController extends Controller
     {
           $model = $this->findModel($id);
           $modelContatos = SgdnRelContactos::find()->where(['PESSOA_ID' => $model->ID])->all();
+          $modelDocumentos = SgdnRelDocumentos::find()->where(['PESSOA_ID' => $model->ID])->all();
           return $this->render('view', [
                 'model' => $model,
-                'modelContatos' =>$modelContatos
+                'modelContatos' => $modelContatos,
+                'modelDocumentos' => $modelDocumentos,
           ]);
     }
 
@@ -243,10 +280,10 @@ class SgdnPessoaController extends Controller
                       $tmp = explode(".", $model->file);
                       $ext = end($tmp);
                       $generateRandomName = Yii::$app->security->generateRandomString().".{$ext}";
-                      $dir = $file->saveAs('img/pessoas/'.$generateRandomName); // troubleshoot save
+                      $dir = $file->saveAs('img/pessoas/'.$generateRandomName);
                       $model->file = $generateRandomName;
                       $model->URL_FOTO = 'img/pessoas/'.$generateRandomName;
-               }
+                }
 
               $oldIDs = ArrayHelper::map($modelDocumentos, 'ID', 'ID');
               $modelDocumentos = Model::createMultiple(SgdnRelDocumentos::classname(), $modelDocumentos);
@@ -299,7 +336,7 @@ class SgdnPessoaController extends Controller
 
                        if ($flag) {
                            $transaction->commit();
-                           return $this->redirect(['view', 'id' => $model->ID]);
+                           return $this->redirect(['index']);
                        }
                    } catch (Exception $e) {
                        $transaction->rollBack();
@@ -324,9 +361,13 @@ class SgdnPessoaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+      $model = $this->findModel($id);
+      $model->ESTADO = 'I';
+      if ($model->save()) {
+          return $this->redirect(['index']);
+      }else{
+            print_r("Some Error...");
+      }
     }
 
     /**

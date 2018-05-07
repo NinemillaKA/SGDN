@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use Faker\Provider\Uuid;
 
 /**
  * This is the model class for table "sgdn_rel_instrutor_modalidade".
@@ -10,6 +11,7 @@ use Yii;
  * @property string $ID
  * @property string $PR_MODALIDADE_ID
  * @property string $INSTRUTOR_ID
+ * @property string $DATA
  * @property string $OBS
  * @property string $DT_REGISTO
  * @property string $ESTADO
@@ -35,9 +37,10 @@ class SgdnRelInstrutorModalidade extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ID', 'PR_MODALIDADE_ID', 'INSTRUTOR_ID', 'DT_REGISTO', 'ESTADO'], 'required'],
-            [['DT_REGISTO'], 'safe'],
+            [['PR_MODALIDADE_ID', 'INSTRUTOR_ID', 'CODIGO',], 'required'],
+            [['DATA', 'DT_REGISTO'], 'safe'],
             [['ID', 'PR_MODALIDADE_ID', 'INSTRUTOR_ID'], 'string', 'max' => 36],
+            [['CODIGO'], 'string', 'max' => 5],
             [['OBS'], 'string', 'max' => 2000],
             [['ESTADO'], 'string', 'max' => 1],
             [['ID'], 'unique'],
@@ -55,6 +58,8 @@ class SgdnRelInstrutorModalidade extends \yii\db\ActiveRecord
             'ID' => 'ID',
             'PR_MODALIDADE_ID' => 'Pr  Modalidade  ID',
             'INSTRUTOR_ID' => 'Instrutor  ID',
+            'CODIGO' => 'Codigo',
+            'DATA' => 'Data de Contrato',
             'OBS' => 'Obs',
             'DT_REGISTO' => 'Dt  Registo',
             'ESTADO' => 'Estado',
@@ -92,4 +97,19 @@ class SgdnRelInstrutorModalidade extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SgdmInstrutor::className(), ['ID' => 'INSTRUTOR_ID']);
     }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+
+            $this->ID = Uuid::uuid();
+            $this->DT_REGISTO = date('Y-m-d h:m:s');
+            $this->DATA = date('Y-m-d h:m:s');
+            $this->ESTADO = 'A';
+
+        return parent::beforeSave($insert);
+      }
+
+    }
+
 }

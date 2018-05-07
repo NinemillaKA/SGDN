@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //'MATERIAL_TP_ID',
                                 'DESIG',
                                 'CODIGO',
-                                'URL_LOGO:url',
+                                'URL_LOGO',
                                 'DESCR',
                                 'DT_REGISTO',
                                 [
@@ -47,10 +47,31 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]) ?>
                     </div>
                     <div class="col-md-3" >
-                        <?php echo Html::img('@web/'.$model->URL_LOGO, ['style' => 'background: #f4f7fa; border: 5px solid #DCDCDC; height:264px; width: 213px; overflow: hidden; width:100% !important;']) ?>
+                        <?php echo Html::img('@web/'.$model->URL_LOGO, ['style' => 'background: #f4f7fa; border: 1px solid #DCDCDC; height:264px; width: 213px; overflow: hidden; width:100% !important;']) ?>
+                        <footer 'style'='font-size: 12px;'><!--&emsp;--><i><b>img</b>_material:</i> <?= $model->DESIG ?> </footer>
                     </div>
               </div></div>
         </div>
       </div>
     </div>
+
 </div>
+
+<?php if ($model->ESTADO_MATERIAL == 'G'): ?>
+          <div class="callout callout-success">
+                  <h4>Observação</h4>
+                  <?= $model->DESCR ?>
+          </div>
+        <?php elseif ($model->ESTADO_MATERIAL == 'W'): ?>
+          <div class="callout callout-warning">
+                  <h4>Observação</h4>
+                  <?= $model->DESCR ?>
+          </div>
+
+          <?php else: ?>
+              <div class="callout callout-danger">
+                      <h4>Observação</h4>
+                      <?= $model->DESCR ?>
+              </div>
+
+<?php endif; ?>

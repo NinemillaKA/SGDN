@@ -38,6 +38,17 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'assetManager' => [
+            'bundles' => [
+                'dosamigos\google\maps\MapAsset' => [
+                    'options' => [
+                        'key' => 'AIzaSyBGyzGZY5UKVMPmRp2xVNKJ8XYKCFU9bbE',
+                        'language' => 'en',
+                        'version' => '3.1.18'
+                    ]
+                ]
+            ]
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
