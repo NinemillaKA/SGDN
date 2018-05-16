@@ -54,7 +54,7 @@ use yii\helpers\ArrayHelper;
 
 <script type="text/javascript">
 
-    //get Sgdnpessoa
+    //get SgdnEntidade
     <?php if (!$model->isNewRecord): ?>
         $(document).ready(function(){
             $("#selectEntidade").trigger("change");

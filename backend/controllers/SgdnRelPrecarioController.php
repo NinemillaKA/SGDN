@@ -8,6 +8,8 @@ use backend\models\SgdnRelPrecarioSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Model;
+use backend\models\SgdnRelMaterialModalidade;
 
 /**
  * SgdnRelPrecarioController implements the CRUD actions for SgdnRelPrecario model.
@@ -52,7 +54,8 @@ class SgdnRelPrecarioController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        // $model = findModel($this->$id);
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -64,15 +67,77 @@ class SgdnRelPrecarioController extends Controller
      */
     public function actionCreate()
     {
-        $model = new SgdnRelPrecario();
+        //$model = new SgdnRelPrecario();
+        $modelsMaterialModalidade =  [new SgdnRelPrecario];
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+        if (Yii::$app->request->post()) {
+
+            $modelsMaterialModalidade = Model::createMultiple(SgdnRelPrecario::classname());
+            Model::loadMultiple($modelsMaterialModalidade, Yii::$app->request->post());
+            // $valid = $model->validate();
+            $valid = SgdnRelPrecario::validateMultiple($modelsMaterialModalidade) /*&& $valid*/;
+            $valid=true;
+            if($valid){
+
+                $transaction = \Yii::$app->db->beginTransaction();
+                try{
+
+                    //  if ($flag = $model->save(false)) {
+                          $flag = false;
+                          foreach ($modelsMaterialModalidade as $key => $modelMaterialModalidade) {
+
+                                //gyardar rel material modalidade
+                                $model_mat_mod = new SgdnRelMaterialModalidade();
+                                $model_mat_mod->MATERIAL_ID = $modelMaterialModalidade->REL_MATERIAL_MODALIDADE_ID;
+                                $model_mat_mod->MODALIDADE_ID = $_POST['MODALIDADE_ID'][$key];
+
+                                if($model_mat_mod->save())
+                                {
+                                  $modelMaterialModalidade->REL_MATERIAL_MODALIDADE_ID = $model_mat_mod->ID;
+
+                                  if (! ($flag = $modelMaterialModalidade->save(false))) {
+
+                                      print_r($modelMaterialModalidade->errors);
+                                      $transaction->rollBack();
+                                        echo "5";
+                                      \Yii::$app->end();
+                                      break;
+                                  }
+
+                                }else{
+                                    echo "6";
+                                    print_r ($model_mat_mod->errors);\Yii::$app->end();
+                                }
+                          }
+
+                  } catch (Exception $e) {
+                        echo "2";
+                      $transaction->rollBack();
+                      \Yii::$app->end();
+                  }
+
+                  if($flag){
+                      $transaction->commit();
+                      echo "3";
+                      return $this->redirect(['index']);
+                  }else{
+                      echo "4";\Yii::$app->end();
+                    //  print_r ($model->errors);
+                  }
+
+                return $this->redirect(['index']);
+            }else{
+                echo "5";var_dump($valid);\Yii::$app->end();
+              //  print_r ($model->errors);
+            }
+
         }
 
-        return $this->render('create', [
-            'model' => $model,
+        return $this->renderAjax('create', [
+            //'model' => $model,
+            'modelMaterialModalidade' => $modelsMaterialModalidade,
         ]);
+
     }
 
     /**
@@ -84,15 +149,15 @@ class SgdnRelPrecarioController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+      $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
-        }
+     if ($model->load(Yii::$app->request->post()) && $model->save()) {
+         return $this->redirect(['index']);
+     }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+     return $this->renderAjax('_form_item', [
+         'model' => $model,
+     ]);
     }
 
     /**
@@ -104,7 +169,9 @@ class SgdnRelPrecarioController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        // ($model->ESTADO == 'I') ? $model->ESTADO = 'A' : $model->ESTADO = 'I';
+        ($model->ESTADO == 'A') ? $model->ESTADO = 'I' : $model->ESTADO = 'A';
 
         return $this->redirect(['index']);
     }

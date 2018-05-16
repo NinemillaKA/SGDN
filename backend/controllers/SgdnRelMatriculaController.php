@@ -5,6 +5,8 @@ namespace backend\controllers;
 use Yii;
 use backend\models\SgdnRelMatricula;
 use backend\models\SgdnRelMatriculaSearch;
+use backend\models\SgdnRelAula;
+use backend\models\SgdnPessoa;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,9 +54,14 @@ class SgdnRelMatriculaController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+      $model = $this->findModel($id);
+      // // $instructorCounter = SgdnRelAulaInstrutorModalidade::find()->where(['AULA_ID' => $model->ID])->count();
+      // $modelAluno = SgdnPessoa::find()->where(['ID' => $model->ALUNO_ID])->one();
+      return $this->renderAjax('view', [
+          'model' => $model,
+           // 'instructorCounter' => $instructorCounter,
+           // 'modelAluno' => $modelAluno,
+      ]);
     }
 
     /**
@@ -62,16 +69,39 @@ class SgdnRelMatriculaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
+
+     public function actionGetAulaPrice($id){
+
+           $model = SgdnRelAula::find()->where(['ID' => $id])->one();
+           echo $model->PRECO;
+
+     }
+
     public function actionCreate()
     {
         $model = new SgdnRelMatricula();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+        $codeauto = SgdnRelMatricula::find()->orderBy(['CODIGO' => SORT_DESC])->one();
+        if($codeauto==null){
+           $resultado = 0;
+        }else{
+          $resultado =  $codeauto->CODIGO;
+        }
+        $registro = $resultado + 1;
+        $model->CODIGO = str_pad($registro, 4 , '0', STR_PAD_LEFT);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model_aula = SgdnRelAula::find()->where(['ID' => $model->AULA_ID])->one();
+
+            $model->PRECO = $model_aula->PRECO;
+
+            if($model->save())
+              return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
+            // 'modelsAula' => $modelAula,
         ]);
     }
 
@@ -87,10 +117,10 @@ class SgdnRelMatriculaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+            return $this->redirect(['index']);
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
         ]);
     }
@@ -104,7 +134,26 @@ class SgdnRelMatriculaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->ESTADO = 'I';
+        if($model->save()){
+            return $this->redirect(['index']);
+        }else{
+          print_r('Some Errors!');
+        }
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionRecover($id)
+    {
+        $model = $this->findModel($id);
+        $model->ESTADO = 'A';
+        if($model->save()){
+            return $this->redirect(['index']);
+        }else{
+          print_r('Some Errors!');
+        }
 
         return $this->redirect(['index']);
     }

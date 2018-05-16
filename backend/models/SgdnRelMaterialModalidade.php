@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use \Faker\Provider\Uuid;
 
 /**
  * This is the model class for table "sgdn_rel_material_modalidade".
@@ -34,7 +35,7 @@ class SgdnRelMaterialModalidade extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ID', 'MATERIAL_ID', 'MODALIDADE_ID'], 'required'],
+            [['MATERIAL_ID', 'MODALIDADE_ID'], 'required'],
             [['DT_REGISTO'], 'safe'],
             [['ID', 'MATERIAL_ID', 'MODALIDADE_ID'], 'string', 'max' => 36],
             [['ESTADO'], 'string', 'max' => 1],
@@ -88,5 +89,18 @@ class SgdnRelMaterialModalidade extends \yii\db\ActiveRecord
     public function getSgdnRelRequisicaos()
     {
         return $this->hasMany(SgdnRelRequisicao::className(), ['MODALIDADE_ID' => 'ID']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+          $this->ID = Uuid::uuid();
+          $this->DT_REGISTO = date('Y-m-d h:m:s');
+          $this->ESTADO = 'A';
+
+            return true;
+         }
+
+        return parent::beforeSave($insert);
     }
 }

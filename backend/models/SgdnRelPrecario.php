@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use \Faker\Provider\Uuid;
 
 /**
  * This is the model class for table "sgdn_rel_precario".
@@ -16,7 +17,7 @@ use Yii;
  * @property string $ESTADO
  *
  * @property SgdnRelAluguer[] $sgdnRelAluguers
- * @property SgdnRelAula $rELAULA
+ // * @property SgdnRelAula $rELAULA
  * @property SgdnRelMaterialModalidade $rELMATERIALMODALIDADE
  */
 class SgdnRelPrecario extends \yii\db\ActiveRecord
@@ -35,14 +36,14 @@ class SgdnRelPrecario extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ID', 'PRECO', 'DT_REGISTO', 'ESTADO'], 'required'],
+            [['PRECO'], 'required'],
             [['PRECO'], 'number'],
             [['DT_REGISTO'], 'safe'],
             [['ID', 'REL_AULA_ID', 'REL_MATERIAL_MODALIDADE_ID'], 'string', 'max' => 36],
             [['OBS'], 'string', 'max' => 2000],
             [['ESTADO'], 'string', 'max' => 1],
             [['ID'], 'unique'],
-            [['REL_AULA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnRelAula::className(), 'targetAttribute' => ['REL_AULA_ID' => 'ID']],
+            // [['REL_AULA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnRelAula::className(), 'targetAttribute' => ['REL_AULA_ID' => 'ID']],
             [['REL_MATERIAL_MODALIDADE_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnRelMaterialModalidade::className(), 'targetAttribute' => ['REL_MATERIAL_MODALIDADE_ID' => 'ID']],
         ];
     }
@@ -54,7 +55,7 @@ class SgdnRelPrecario extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'REL_AULA_ID' => 'Rel  Aula  ID',
+            // 'REL_AULA_ID' => 'Rel  Aula  ID',
             'REL_MATERIAL_MODALIDADE_ID' => 'Rel  Material  Modalidade  ID',
             'PRECO' => 'Preco',
             'OBS' => 'Obs',
@@ -71,13 +72,13 @@ class SgdnRelPrecario extends \yii\db\ActiveRecord
         return $this->hasMany(SgdnRelAluguer::className(), ['PRECARIO_ID' => 'ID']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRELAULA()
-    {
-        return $this->hasOne(SgdnRelAula::className(), ['ID' => 'REL_AULA_ID']);
-    }
+    // /**
+    //  * @return \yii\db\ActiveQuery
+    //  */
+    // public function getRELAULA()
+    // {
+    //     return $this->hasOne(SgdnRelAula::className(), ['ID' => 'REL_AULA_ID']);
+    // }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -86,4 +87,18 @@ class SgdnRelPrecario extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SgdnRelMaterialModalidade::className(), ['ID' => 'REL_MATERIAL_MODALIDADE_ID']);
     }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+          $this->ID = Uuid::uuid();
+          $this->DT_REGISTO = date('Y-m-d h:m:s');
+          $this->ESTADO = 'A';
+
+            return true;
+         }
+
+        return parent::beforeSave($insert);
+    }
+
 }

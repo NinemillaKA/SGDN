@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use \Faker\Provider\Uuid;
 
 /**
  * This is the model class for table "sgdn_rel_aluguer".
@@ -30,14 +31,26 @@ class SgdnRelAluguer extends \yii\db\ActiveRecord
         return 'sgdn_rel_aluguer';
     }
 
+     const SCENARIO_PESSOA = 'pessoa';
+     const SCENARIO_ALUGER = 'aluguer';
+
+     public function scenarios()
+     {
+         $scenarios = parent::scenarios();
+         $scenarios[self::SCENARIO_PESSOA] = ['PESSOA_ID'];
+         $scenarios[self::SCENARIO_ALUGER] = ['PRECARIO_ID', 'DT_ALUGUER','DT_DEVOLUCAO'];
+         return $scenarios;
+     }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['ID', 'PESSOA_ID', 'PRECARIO_ID', 'DT_ALUGUER', 'DT_REGISTO', 'ESTADO'], 'required'],
-            [['DT_ALUGUER', 'DT_DEVOLUCAO', 'DT_REGISTO'], 'safe'],
+            [['PRECARIO_ID', 'DT_ALUGUER','DT_DEVOLUCAO'], 'required'],
+            [['PESSOA_ID'], 'required','on'=>self::SCENARIO_PESSOA],
+            [['PRECARIO_ID','DT_ALUGUER', 'DT_DEVOLUCAO', 'DT_REGISTO'], 'safe'],
             [['VALOR'], 'number'],
             [['ID', 'PESSOA_ID', 'PRECARIO_ID'], 'string', 'max' => 36],
             [['OBS'], 'string', 'max' => 2000],
@@ -81,4 +94,18 @@ class SgdnRelAluguer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SgdnRelPrecario::className(), ['ID' => 'PRECARIO_ID']);
     }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+          $this->ID = Uuid::uuid();
+          $this->DT_REGISTO = date('Y-m-d h:m:s');
+          $this->ESTADO = 'A';
+
+            return true;
+         }
+
+        return parent::beforeSave($insert);
+    }
+
 }

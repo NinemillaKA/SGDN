@@ -5,7 +5,7 @@ use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnRelAula */
 
-$this->title = 'Update Sgdn Rel Aula: {.'$model->DESIG'}';
+$this->title = 'Update Sgdn Rel Aula: {'.$model->DESIG.'}';//error
 $this->params['breadcrumbs'][] = ['label' => 'Sgdn Rel Aulas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->ID, 'url' => ['view', 'id' => $model->ID]];
 $this->params['breadcrumbs'][] = 'Update';
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = 'Update';
     'id' => 'update-modal',
     'size' => 'modal-lg',
     'header' => '<strong>Actualizar Instrutor</strong>',
-    'footer' => Html::button('<i class="fa fa-save"></i> Confirmar', ['onclick' => '$("#sgdn-rel-aula-form").submit();', 'class' => 'pull-right btn btn-flat btn-primary']),
+    'footer' => Html::button('<i class="fa fa-save"></i> Confirmar', ['onclick' => '$("#sgdn-rel-aluguer-form").submit();', 'class' => 'pull-right btn btn-flat btn-primary']),
   ]);
 ?>
 
@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'modelAulaInstrutorModalidade' => $modelAulaInstrutorModalidade,
     ]) ?>
 
 </div>

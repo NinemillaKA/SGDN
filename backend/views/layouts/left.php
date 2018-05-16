@@ -57,9 +57,18 @@
                                                     'items' => [
                                                                   ['label' => 'Tipos', 'icon'    => 'fal fa-question', 'url' => ['/sgdn-pr-material-tp'],],
                                                                   ['label' => 'Marcas', 'icon'    => 'fal fa-slack', 'url' => ['/sgdn-pr-material-marca'],],
-                                                                  ['label' => 'Preciario', 'icon'    => 'fal fa-money', 'url' => ['/'],],
+
                                                      ]
                                              ],
+
+                                             [
+                                               'label' => 'Preciario',
+                                               'icon' => 'fal fa-money',
+                                               'url' => ['/'],
+                                                     'items' => [
+                                                                   ['label' => 'Materiais', 'icon'    => 'fal fa-wrench', 'url' => ['/sgdn-rel-precario'],],
+                                                      ]
+                                              ],
                                ]
                        ],
 
@@ -82,11 +91,7 @@
                       'icon' => ' fa-cubes',
                       'url' => ['/'],
                       'items' => [
-                          [
-                            'label' => 'Materiais',
-                            'icon' => 'fal fa-wrench',
-                            'url' =>  ['/sgdn-material'],
-                          ],
+                          ['label' => 'Materiais','icon' => 'fal fa-wrench','url' =>  ['/sgdn-material'],],
                         ],
                      ],
 
@@ -104,7 +109,7 @@
                                 'url' => ['/sgdn-pr-modalidade'],
                               ],
                               ['label' => 'Aulas','icon' => 'fab fa-leanpub','url' => ['/sgdn-rel-aula'],],
-                              ['label' => 'Calendar','icon' => 'fal fa-calendar','url' => ['/calendar.php'],],
+                              ['label' => 'Calendar','icon' => 'fal fa-calendar','url' => ['/sgdn-rel-aula/calendar'],],
                              ],
                       ],
 
@@ -114,10 +119,11 @@
                           'url' => '#',
                           'items' => [
                                         ['label' => 'Cadastro', 'icon' => 'far  fa-plus-circle', 'url' => ['/sgdm-instrutor'],],
-                                        ['label' => 'Matricula', 'icon' => 'far fa-money', 'url' => ['#'],],
+                                        ['label' => 'Matricula', 'icon' => 'far fa-money', 'url' => ['/sgdn-rel-matricula'],],
                                         ['label' => 'Contracto', 'icon' => 'far fa-scissors', 'url' => ['/sgdn-rel-instrutor-modalidade'],],
-                                        ['label' => 'Emprestimo','icon' => 'fal fa-exchange', 'url' => ['#'],],
-                                        ['label' => 'Alojamento','icon' => 'fal fa-home', 'url' => ['#'],],
+                                        ['label' => 'Emprestimo','icon' => 'fal fa-exchange', 'url' => ['/sgdn-rel-aluguer'],],
+                                        ['label' => 'Alojamento','icon' => 'fal fa-home', 'url' => ['/sgdn-residencia'],],
+                                        ['label' => 'Trip','icon' => 'fal fa-tree', 'url' => ['#'],],
                           ],
                       ],
 

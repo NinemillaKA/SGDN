@@ -19,6 +19,7 @@ use \Faker\Provider\Uuid;
  * @property string $ESTADO
  *
  * @property SgdnPrMaterialTp $mATERIALTP
+ * @property SgdnPrMaterialMarca $mATERIALMARCA
  * @property SgdnRelMaterialModalidade[] $sgdnRelMaterialModalidades
  */
 class SgdnMaterial extends \yii\db\ActiveRecord
@@ -66,7 +67,7 @@ class SgdnMaterial extends \yii\db\ActiveRecord
             'DESIG' => 'Desig',
             'URL_LOGO' => 'Url  Logo',
             'DESCR' => 'Descr',
-            'ESTADO_MATERIAL' => 'Estado Material', 
+            'ESTADO_MATERIAL' => 'Estado Material',
             'DT_REGISTO' => 'Dt  Registo',
             'ESTADO' => 'Estado',
         ];

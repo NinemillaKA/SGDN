@@ -63,18 +63,31 @@ use yii\helpers\ArrayHelper;
 
 <script type="text/javascript">
 
-    //get_pessoa
-    // <-?php if (!$model->isNewRecord): ?>
-    //     $(document).ready(function(){
-    //
-    //         $("#selectPessoa").trigger("change");
-    //     });
-    // <-?php endif; ?>
-      function getPessoa(id_pessoa)
-      {
-          $.get( '<?=Url::to(['sgdn-pessoa/get-pessoa1'])?>',{id:id_pessoa}, function( data ) {
-              $( "#result" ).html( data );
+// <-?php if (!$model->isNewRecord): ?>
+//     $(document).ready(function(){
+//
+//         $("#selectPessoa").trigger("change");
+//     });
+// <-?php endif; ?>
+//   function getPessoa(id_pessoa)
+//   {
+//       $.get( '<?=Url::to(['sgdn-pessoa/get-pessoa'])?>',{id:id_pessoa}, function( data ) {
+//           $( "#result" ).html( data );
+//
+//         });
+//   }
 
-            });
-      }
+  //get SgdnEntidade
+  <?php if (!$model->isNewRecord): ?>
+      $(document).ready(function(){
+          $("#selectEntidade").trigger("change");
+      });
+  <?php endif; ?>
+  function getPessoa(id_pessoa)
+  {
+      $.get( '<?=Url::to(['sgdn-pessoa/get-pessoa1'])?>',{id:id_pessoa}, function( data ) {
+          $( "#result" ).html( data );
+
+        });
+  }
 </script>

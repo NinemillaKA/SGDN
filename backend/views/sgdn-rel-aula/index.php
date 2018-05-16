@@ -63,10 +63,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                    'onclick' => 'update("' .$url. '")',
                                  ]);
                            },
+                           'delete' => function($url, $model){
+                               return Html::a(($model['ESTADO'] == 'A') ? '<span class="glyphicon glyphicon-trash"></span>':'<span class="glyphicon glyphicon-refresh"></span>', ['delete', 'id' => $model['ID']],
+                               [ 'class' => '',
+                                    'data' => [ 'confirm' => 'Are you absolutely sure ? You will lose all the information about this user with this action.', 'method' => 'post', ],
+                                    ]);
+                             },
                       ],
 
                    ],
                   ],
                 ]); ?>
+         </div>
+   </div>
 </div>
 <div id="hidden-content"></div>

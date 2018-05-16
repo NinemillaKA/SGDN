@@ -25,6 +25,7 @@ use \Faker\Provider\Uuid;
  * @property SgdnPrModalidade $mODALIDADE
  * @property SgdnRelEntidadeSpot $sPOT
  * @property SgdnRelInstrutorModalidade $iNSTMODALIDADE
+ * @property SgdnRelAulaInstrutorModalidade[] $sgdnRelAulaInstrutorModalidades
  * @property SgdnRelMatricula[] $sgdnRelMatriculas
  * @property SgdnRelPrecario[] $sgdnRelPrecarios
  * @property SgdnRelRequisicao[] $sgdnRelRequisicaos
@@ -99,13 +100,13 @@ class SgdnRelAula extends \yii\db\ActiveRecord
         return $this->hasOne(SgdnRelEntidadeSpot::className(), ['ID' => 'SPOT_ID']);
     }
 
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getINSTMODALIDADE()
-    // {
-    //     return $this->hasOne(SgdnRelInstrutorModalidade::className(), ['ID' => 'INST_MODALIDADE_ID']);
-    // }
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+   public function getSgdnRelAulaInstrutorModalidades()
+   {
+      return $this->hasMany(SgdnRelAulaInstrutorModalidade::className(), ['AULA_ID' => 'ID']);
+   }
 
     /**
      * @return \yii\db\ActiveQuery

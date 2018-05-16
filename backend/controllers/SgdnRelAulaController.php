@@ -9,8 +9,10 @@ use backend\models\SgdnRelAulaInstrutorModalidade;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use app\models\Model;
-use backend\models\SgdnRelInstrutorModalidade; //(X)
+use backend\models\SgdnRelInstrutorModalidade;
+
 
 
 /**
@@ -33,18 +35,23 @@ class SgdnRelAulaController extends Controller
         ];
     }
 
-     public function actionLists($id)
-    {
-         // echo "<pre>";print_r($id);die;
 
-         //print_r($id);
+    // init CALENDAR
+
+    public function actionCalendar(){
+
+        return $this->render('calendar');
+    }
+
+    public function actionLists($id)
+    {
+
          $countPosts = SgdnRelInstrutorModalidade::find()
          ->where(['PR_MODALIDADE_ID' => $id])
          ->count();
 
-         $models = SgdnRelInstrutorModalidade::find() //(X)
+         $models = SgdnRelInstrutorModalidade::find()
          ->where(['PR_MODALIDADE_ID' => $id])
-         //->orderBy('id DESC')
          ->all();
 
          if($countPosts>0){
@@ -80,10 +87,19 @@ class SgdnRelAulaController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+     // public function getComment_count()
+     // {
+     //     return SgdnRelAulaInstrutorModalidade::find()->where(['AULA_ID' => $this->id])->count();
+     // }
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $instructorCounter = SgdnRelAulaInstrutorModalidade::find()->where(['AULA_ID' => $model->ID])->count();
+        $modelsSgdnRelAulaInstrutorModalidade = SgdnRelAulaInstrutorModalidade::find()->where(['AULA_ID' => $model->ID])->all();
         return $this->renderAjax('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+             'instructorCounter' => $instructorCounter,
+             'modelAulaInstrutorModalidade' => $modelsSgdnRelAulaInstrutorModalidade,
         ]);
     }
 
@@ -92,6 +108,7 @@ class SgdnRelAulaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
+
     public function actionCreate()
     {
         $model = new SgdnRelAula();
@@ -123,8 +140,8 @@ class SgdnRelAulaController extends Controller
 
             $valid = $model->validate();
             $valid = SgdnRelAulaInstrutorModalidade::validateMultiple($modelsSgdnRelAulaInstrutorModalidade) && $valid;
-            var_dump($valid);
-            if ($valid) {
+            //var_dump($valid);
+            if ($valid)
 
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
@@ -162,8 +179,7 @@ class SgdnRelAulaController extends Controller
                     print_r ($model->errors);
                 }
            }
-        }
-
+        // }
 
         return $this->renderAjax('create', [
             'model' => $model,
@@ -180,20 +196,58 @@ class SgdnRelAulaController extends Controller
      */
     public function actionUpdate($id)
     {
+        $model = $this->findModel($id);
+        $modelsSgdnRelAulaInstrutorModalidade = $model->sgdnRelAulaInstrutorModalidades;
+
         if ($model->load(Yii::$app->request->post())) {
 
-            if ($model->save())
+            $oldIDs = ArrayHelper::map($modelsSgdnRelAulaInstrutorModalidade, 'ID', 'ID');
+            $modelsSgdnRelAulaInstrutorModalidade = Model::createMultiple(SgdnRelAulaInstrutorModalidade::classname(), $modelsSgdnRelAulaInstrutorModalidade);
+            Model::loadMultiple($modelsSgdnRelAulaInstrutorModalidade, Yii::$app->request->post());
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsSgdnRelAulaInstrutorModalidade, 'ID', 'ID')));
+
+            $valid = $model->validate();
+            $valid = Model::validateMultiple($modelsSgdnRelAulaInstrutorModalidade);
+
+            if ($valid)
             {
-                return $this->redirect(['index']);
-            }else{
-              print_r($model->errors);
-            }
+              $transaction = \Yii::$app->db->beginTransaction();
+              try {
+                    if ($flag = $model->save(false)) {
+                            if (!empty($deletedIDs)) {
+                                SgdnRelAulaInstrutorModalidade::deleteAll(['ID' => $deletedIDs]);
+                            }
+                            foreach ($modelsSgdnRelAulaInstrutorModalidade as $modelSgdnRelAulaInstrutorModalidade) {
+                                $modelSgdnRelAulaInstrutorModalidade->AULA_ID = $model->ID;
+                                if (! ($flag = $modelSgdnRelAulaInstrutorModalidade->save(false))) {
+                                    $transaction->rollBack();
+                                    break;
+                                }
+                            }
+                            return $this->redirect(['index']);
+                    }else{
+                            print_r($model->errors);
+                            \Yii::$app->end();
+                    }
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->ID]);
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+           }
+
+           return $this->redirect(['view', 'id' => $model->ID]);
 
         }
 
         return $this->renderAjax('update', [
             'model' => $model,
+            'modelAulaInstrutorModalidade' => (empty($modelsSgdnRelAulaInstrutorModalidade)) ? [new SgdnRelAulaInstrutorModalidade] : $modelsSgdnRelAulaInstrutorModalidade,
+
         ]);
+
     }
 
     /**
@@ -206,7 +260,9 @@ class SgdnRelAulaController extends Controller
     public function actionDelete($id)
     {
           $model = $this->findModel($id);
-          $model->ESTADO = 'I';
+
+          ($model->ESTADO == 'A') ? $model->ESTADO = 'I' : $model->ESTADO = 'A';
+
           if ($model->save()) {
               return $this->redirect(['index']);
           }else{

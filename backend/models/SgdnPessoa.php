@@ -217,8 +217,18 @@ class SgdnPessoa extends \yii\db\ActiveRecord
       public function afterFind(){ //inverter data
 
           parent::afterFind();
-          $this->DT_NASC = date("d-m-Y",strtotime($this->DT_NASC));          
+          $this->DT_NASC = date("d-m-Y",strtotime($this->DT_NASC));
       }
 
-
+      // public function dataNascimento () {
+      //     // Return the number of days between the two dates:
+      //
+      //       //return round((abs(strtotime( $this->DT_NASC)-strtotime(time()))/86400)/365);
+      //       $date1=date($this->DT_NASC);
+      //       $date2=date();
+      //
+      //       $date_diff=strtotime($date2)-strtotime($date1);
+      //       return floor(($date_diff)/(60*60*24*365));
+      //
+      //     }
 }

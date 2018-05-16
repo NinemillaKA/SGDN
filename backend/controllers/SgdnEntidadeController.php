@@ -217,7 +217,6 @@ class SgdnEntidadeController extends Controller
                                   $docfile->saveAs('doc/entidades/'.$generateRandomName);
                                   echo "doc_upload_success";
                                   // doc file don't save in his DI
-
                               }
 
                               $modelSgdnDocumento->ENTIDADE_ID = $model->ID;
