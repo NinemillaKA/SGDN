@@ -21,14 +21,14 @@ use yii\helpers\ArrayHelper;
                 <?= $form->field($model, 'CODIGO')->textInput(['maxlength' => true,]) ?>
             </div>
             <?php if (!$model->isNewRecord){ ?>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'PESSOA_ID')->dropDownList(ArrayHelper::map(SgdnPessoa::find()->where('ESTADO = "A"')->all(),'ID','NOME'),
+                <!-- <div class="col-md-6">
+                    <-?= $form->field($model, 'PESSOA_ID')->dropDownList(ArrayHelper::map(SgdnPessoa::find()->where('ESTADO = "A"')->all(),'ID','NOME'),
                     ['disabled'=> true,'prompt'=>'*** Seleciona Pessoa ***',
                     'Onchange'=>'getPessoa(this.value);','id'=>'selectPessoa', 'class'=>'form-control']) ?>
-                </div>
-                <div class="col-md-12">
-                    <?= $form->field($model, 'OBS')->textArea(['maxlength' => true, 'line' => '2', 'placeholder' => 'Enter Some Description...']) ?>
-                </div>
+                </div> -->
+                <!-- <div class="col-md-12">
+                    <-?= $form->field($model, 'OBS')->textArea(['maxlength' => true, 'line' => '2', 'placeholder' => 'Enter Some Description...']) ?>
+                </div> -->
                 <div class="col-md-12">
                       <?= $form->field($model, 'ESTADO')->dropDownList(["A" => "ACTIVO", "I" => "INACTIVO"],['prompt' =>'*** ESTADO ***', 'class'=>'form-control']) ?>
                 </div>
@@ -47,8 +47,6 @@ use yii\helpers\ArrayHelper;
                 ['prompt'=>'*** Seleciona Pessoa ***',
                 'Onchange'=>'getPessoa(this.value);','id'=>'selectPessoa', 'class'=>'form-control']) ?>
             </div>             -->
-
-
 
         </div>
 

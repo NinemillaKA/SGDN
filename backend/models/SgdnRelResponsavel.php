@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use \Faker\Provider\Uuid;
 
 /**
  * This is the model class for table "sgdn_rel_responsavel".
@@ -34,7 +35,7 @@ class SgdnRelResponsavel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ID', 'PESSOA_ID', 'REL_RESIDENCIA_ID', 'DT_INICIO'], 'required'],
+            [['PESSOA_ID', 'REL_RESIDENCIA_ID', 'DT_INICIO'], 'required'],
             [['DT_INICIO', 'DT_FIM', 'DT_REGISTO'], 'safe'],
             [['ID', 'PESSOA_ID', 'REL_RESIDENCIA_ID'], 'string', 'max' => 36],
             [['ESTADO'], 'string', 'max' => 1],
@@ -74,5 +75,27 @@ class SgdnRelResponsavel extends \yii\db\ActiveRecord
     public function getRELRESIDENCIA()
     {
         return $this->hasOne(SgdnResidencia::className(), ['ID' => 'REL_RESIDENCIA_ID']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+          $this->ID = Uuid::uuid();
+          $this->DT_REGISTO = date('Y-m-d h:m:s');
+          $this->ESTADO = 'A';
+
+            return true;
+         }
+
+        return parent::beforeSave($insert);
+    }
+
+    public function afterFind(){ //inverter data
+
+        parent::afterFind();
+        $this->DT_INICIO = explode(' ',$this->DT_INICIO);
+        $this->DT_INICIO = $this->DT_INICIO[0];
+        $this->DT_FIM = explode(' ',$this->DT_FIM);
+        $this->DT_FIM =$this->DT_FIM[0];
     }
 }

@@ -8,7 +8,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnRelInstrutorModalidade */
 
- $this->title = 'Instrutor: '.$model->iNSTRUTOR->pESSOA->NOME;
+ $this->title = 'Instrutor: '.$model->pESSOA->NOME;
 $this->params['breadcrumbs'][] = ['label' => 'Sgdn Rel Instrutor Modalidades', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -36,6 +36,19 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p> <br>
     <div class="row">
+      <div class="col-md-12">
+          <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Informação Pessoal</h3>
+                </div>
+            <?= $this->render('/sgdn-pessoa/view_detalhes_pessoa', [
+                'model' => $model->iNSTRUTOR->pESSOA,
+                'show_buttonOrLabel'=>false,
+            ]) ?>
+          </div>
+       </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="box">
                   <div class="box-header">
@@ -58,19 +71,6 @@ $this->params['breadcrumbs'][] = $this->title;
                   ]) ?>
             </div>
         </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-          <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">Informação Pessoal</h3>
-                </div>
-            <?= $this->render('/sgdn-pessoa/view_detalhes_pessoa', [
-                'model' => $model->iNSTRUTOR->pESSOA,
-                'show_buttonOrLabel'=>false,
-            ]) ?>
-          </div>
-       </div>
     </div>
     <div class="row">
           <div class="col-md-12">

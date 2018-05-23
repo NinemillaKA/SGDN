@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use \Faker\Provider\Uuid;
 
 /**
  * This is the model class for table "sgdn_rel_alojamento".
@@ -36,7 +37,7 @@ class SgdnRelAlojamento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ID', 'PESSOA_ID', 'RESIDENCIA_ID', 'DT_ENTRADA', 'DT_REGISTO', 'ESTADO'], 'required'],
+            [[ 'PESSOA_ID', 'RESIDENCIA_ID', 'DT_ENTRADA'], 'required'],
             [['DT_ENTRADA', 'DT_SAIDA', 'DT_REGISTO'], 'safe'],
             [['ID', 'PESSOA_ID', 'RESIDENCIA_ID'], 'string', 'max' => 36],
             [['OBS'], 'string', 'max' => 500],
@@ -81,4 +82,18 @@ class SgdnRelAlojamento extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SgdnResidencia::className(), ['ID' => 'RESIDENCIA_ID']);
     }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+          $this->ID = Uuid::uuid();
+          $this->DT_REGISTO = date('Y-m-d h:m:s');
+          $this->ESTADO = 'A';
+
+            return true;
+         }
+
+        return parent::beforeSave($insert);
+    }
+
 }

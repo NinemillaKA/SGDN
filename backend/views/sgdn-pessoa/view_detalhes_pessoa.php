@@ -32,33 +32,32 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         </div>
 
-
                         <div class="col-md-8">
-                        <?= DetailView::widget([
-                            'model' => $model,
-                            'attributes' => [
-                                'NOME',
-                                //'ID',
-                                // 'NATURALIDADE_ID',
-                                'nATURALIDADE.NACIONALIDADE',
-                                //'LOCALIDADE_ID',
-                                'lOCALIDADE.NOME',
-                                //'PR_ESTADO_CIVIL_ID',
-                                'pRESTADOCIVIL.DESIG',
-                                'DT_NASC',
-                                'SEXO',
-                                'MORADA',
-                                //'URL_FOTO:url',
-                                //'DT_REGISTO',
-                                [
-                                         'attribute'=>'ESTADO',
-                                         'value'=>function($model){return ($model->ESTADO == 'A')?'Activo':'Inactivo';},
-                                         'visible' => $show_buttonOrLabel,
+                            <?= DetailView::widget([
+                                'model' => $model,
+                                'attributes' => [
+                                    'NOME',
+                                    //'ID',
+                                    // 'NATURALIDADE_ID',
+                                    'nATURALIDADE.NACIONALIDADE',
+                                    //'LOCALIDADE_ID',
+                                    'lOCALIDADE.NOME',
+                                    //'PR_ESTADO_CIVIL_ID',
+                                    'pRESTADOCIVIL.DESIG',
+                                    'DT_NASC',
+                                    'SEXO',
+                                    'MORADA',
+                                    //'URL_FOTO:url',
+                                    //'DT_REGISTO',
+                                    [
+                                             'attribute'=>'ESTADO',
+                                             'value'=>function($model){return ($model->ESTADO == 'A')?'Activo':'Inactivo';},
+                                             'visible' => $show_buttonOrLabel,
+
+                                    ],
 
                                 ],
-
-                            ],
-                        ]) ?>
+                            ]) ?>
                       </div>
               </div>
           </div>

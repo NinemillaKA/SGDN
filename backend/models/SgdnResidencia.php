@@ -3,7 +3,7 @@
 namespace backend\models;
 
 use Yii;
-
+use \Faker\Provider\Uuid;
 /**
  * This is the model class for table "sgdn_residencia".
  *
@@ -31,6 +31,7 @@ class SgdnResidencia extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $file;
     public static function tableName()
     {
         return 'sgdn_residencia';
@@ -42,7 +43,7 @@ class SgdnResidencia extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ID', 'LOCALIDADE_ID', 'DESIG', 'DT_REGISTO', 'ESTADO'], 'required'],
+            [['LOCALIDADE_ID', 'DESIG',], 'required'],
             [['PRECO_DIA', 'VALOR'], 'number'],
             [['DT_REGISTO'], 'safe'],
             [['ID', 'SELF_ID'], 'string', 'max' => 36],
@@ -53,6 +54,7 @@ class SgdnResidencia extends \yii\db\ActiveRecord
             [['ENDERECO'], 'string', 'max' => 500],
             [['ESTADO'], 'string', 'max' => 1],
             [['ID'], 'unique'],
+            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'checkExtensionByMimeType'=>false, 'maxFiles' => 1],
             [['LOCALIDADE_ID'], 'exist', 'skipOnError' => true, 'targetClass' => GlbGeografia::className(), 'targetAttribute' => ['LOCALIDADE_ID' => 'ID']],
             [['SELF_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnResidencia::className(), 'targetAttribute' => ['SELF_ID' => 'ID']],
         ];
@@ -124,5 +126,18 @@ class SgdnResidencia extends \yii\db\ActiveRecord
     public function getSgdnResidencias()
     {
         return $this->hasMany(SgdnResidencia::className(), ['SELF_ID' => 'ID']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+          $this->ID = Uuid::uuid();
+          $this->DT_REGISTO = date('Y-m-d h:m:s');
+          $this->ESTADO = 'A';
+
+            return true;
+         }
+
+        return parent::beforeSave($insert);
     }
 }

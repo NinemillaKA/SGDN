@@ -76,15 +76,16 @@
                        'label' => 'Pessoas', 'icon' => 'fab fa-group','url' => ['/sgdn-pessoa'],
                      ],
                      [
-                         'label' => 'Spots',
-                         'icon' => 'fab fa-anchor',
-                         'url' => ['/sgdn-spot'],
-
+                         'label' => 'Spots', 'icon' => 'fab fa-anchor','url' => ['/sgdn-spot'],
                      ],
 
-                    [
+                     [
                       'label' => 'Entidades', 'icon' => 'fal fa-home', 'url' => ['/sgdn-entidade'],
-                    ],
+                     ],
+
+                     [
+                      'label' => 'Residencia', 'icon' => 'fal fa-bank', 'url' => ['/sgdn-residencia'],
+                     ],
 
                     [
                       'label' => 'Armazem',
@@ -122,8 +123,9 @@
                                         ['label' => 'Matricula', 'icon' => 'far fa-money', 'url' => ['/sgdn-rel-matricula'],],
                                         ['label' => 'Contracto', 'icon' => 'far fa-scissors', 'url' => ['/sgdn-rel-instrutor-modalidade'],],
                                         ['label' => 'Emprestimo','icon' => 'fal fa-exchange', 'url' => ['/sgdn-rel-aluguer'],],
-                                        ['label' => 'Alojamento','icon' => 'fal fa-home', 'url' => ['/sgdn-residencia'],],
+                                        ['label' => 'Alojamento','icon' => 'fal fa-home', 'url' => ['/sgdn-rel-alojamento'],],
                                         ['label' => 'Trip','icon' => 'fal fa-tree', 'url' => ['#'],],
+                                        ['label' => 'Responsavel Residencia','icon' => 'fal fa-home', 'url' => ['/sgdn-rel-responsavel'],],
                           ],
                       ],
 
