@@ -3,17 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\SgdnRelAlojamento;
-use backend\models\SgdnRelAlojamentoSearch;
+use backend\models\SgdnRelInscricaoViagen;
+use backend\models\SgdnRelInscricaoViagenSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\SgdnResidencia;
 
 /**
- * SgdnRelAlojamentoController implements the CRUD actions for SgdnRelAlojamento model.
+ * SgdnRelInscricaoViagenController implements the CRUD actions for SgdnRelInscricaoViagen model.
  */
-class SgdnRelAlojamentoController extends Controller
+class SgdnRelInscricaoViagenController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,30 +29,13 @@ class SgdnRelAlojamentoController extends Controller
         ];
     }
 
-    public function actionGetPriceCalculator($id,$dtini,$dtfim)
-    {
-        $id = $_GET['id'];
-        $datetime1 = $_GET['dtini'];
-        $datetime2 = $_GET['dtfim'];
-
-        $datetime1 = new \DateTime($datetime1);
-        $datetime2 = new \DateTime($datetime2);
-
-        $interval = $datetime2->diff($datetime1)->format("%a");
-
-        $model = SgdnResidencia::find()->where(['ID' => $id])->one();
-        $price  = $model->PRECO_DIA * $interval ;
-
-        echo $price;
-    }
-
     /**
-     * Lists all SgdnRelAlojamento models.
+     * Lists all SgdnRelInscricaoViagen models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SgdnRelAlojamentoSearch();
+        $searchModel = new SgdnRelInscricaoViagenSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -63,7 +45,7 @@ class SgdnRelAlojamentoController extends Controller
     }
 
     /**
-     * Displays a single SgdnRelAlojamento model.
+     * Displays a single SgdnRelInscricaoViagen model.
      * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -76,18 +58,22 @@ class SgdnRelAlojamentoController extends Controller
     }
 
     /**
-     * Creates a new SgdnRelAlojamento model.
+     * Creates a new SgdnRelInscricaoViagen model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SgdnRelAlojamento();
-        // var_dump($model);
+        $model = new SgdnRelInscricaoViagen();
+
         if ($model->load(Yii::$app->request->post())) {
 
-              if($model->save())
-                  return $this->redirect(['index']);
+          if ($model->save())
+              return $this->redirect(['index']);
+
+          else
+              print_r ($model->errors);
+
         }
 
         return $this->renderAjax('create', [
@@ -96,7 +82,7 @@ class SgdnRelAlojamentoController extends Controller
     }
 
     /**
-     * Updates an existing SgdnRelAlojamento model.
+     * Updates an existing SgdnRelInscricaoViagen model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -108,17 +94,21 @@ class SgdnRelAlojamentoController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            if($model->save())
-                return $this->redirect(['index']);
+          if ($model->save())
+              return $this->redirect(['index']);
+
+          else
+              print_r ($model->errors);
+
         }
 
-        return $this->renderAjax('update', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Deletes an existing SgdnRelAlojamento model.
+     * Deletes an existing SgdnRelInscricaoViagen model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -138,15 +128,15 @@ class SgdnRelAlojamentoController extends Controller
     }
 
     /**
-     * Finds the SgdnRelAlojamento model based on its primary key value.
+     * Finds the SgdnRelInscricaoViagen model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return SgdnRelAlojamento the loaded model
+     * @return SgdnRelInscricaoViagen the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SgdnRelAlojamento::findOne($id)) !== null) {
+        if (($model = SgdnRelInscricaoViagen::findOne($id)) !== null) {
             return $model;
         }
 

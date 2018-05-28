@@ -35,14 +35,14 @@ use yii\helpers\Url;
                   <div class="col-md-6">
                       <?= $form->field($model, 'OBS')->textInput(['maxlength' => true]) ?>
                   </div>
-                  <div class="col-md-6">
-                    <?php $addon = '<span class="input-group-addon">
+                  <!-- <div class="col-md-6">
+                    <-?php $addon = '<span class="input-group-addon">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </span>';
                         ?>
                         <label> Data </label>
                         <div class="input-group drp-container">
-                            <?= DateRangePicker::widget([
+                            <-?= DateRangePicker::widget([
                                 'model'=>$model,
                                 'attribute' => 'DATA',
                                 'value'=>'2015-10-19 12:00 AM',
@@ -58,7 +58,7 @@ use yii\helpers\Url;
                                 ]
                             ])?>
                          </div>
-                      </div>
+                      </div> -->
                       <!-- <-?php foreach ($modelsAula as $key => $modelAula): ?>
                           <-?php print_r($modelAula->PRECO) ?> -->
                           <div class="col-md-6" id="preco">

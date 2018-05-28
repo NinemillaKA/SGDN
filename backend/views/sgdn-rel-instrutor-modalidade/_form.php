@@ -63,20 +63,6 @@ use yii\helpers\ArrayHelper;
 
 <script type="text/javascript">
 
-// <-?php if (!$model->isNewRecord): ?>
-//     $(document).ready(function(){
-//
-//         $("#selectPessoa").trigger("change");
-//     });
-// <-?php endif; ?>
-//   function getPessoa(id_pessoa)
-//   {
-//       $.get( '<?=Url::to(['sgdn-pessoa/get-pessoa'])?>',{id:id_pessoa}, function( data ) {
-//           $( "#result" ).html( data );
-//
-//         });
-//   }
-
   //get SgdnEntidade
   <?php if (!$model->isNewRecord): ?>
       $(document).ready(function(){

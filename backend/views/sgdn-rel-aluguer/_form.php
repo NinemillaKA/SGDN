@@ -1,12 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\form\ActiveForm;
 use backend\models\SgdnPessoa;
 use backend\models\SgdnRelPrecario;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use wbraganca\dynamicform\DynamicFormWidget;
+use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnRelAluguer */
@@ -17,7 +18,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
     <?php $form = ActiveForm::begin(['id'=>'sgdn-rel-aluguer-form']); ?>
     <!-- <div class="row"> -->
-        <?= $form->field($model, 'PESSOA_ID')->dropDownList(ArrayHelper::map(SgdnPessoa::find()->where('ESTADO = "A"')->all(),'ID','NOME'),
+        <?=  Html::dropDownList('pessoa_id','',ArrayHelper::map(SgdnPessoa::find()->where('ESTADO = "A"')->all(),'ID','NOME'),
         ['prompt'=>'*** Seleciona Pessoa ***',
         'Onchange'=>'getPessoa(this.value);','id'=>'selectPessoa', 'class'=>'form-control']) ?>
         <div id="result">
@@ -50,31 +51,97 @@ use wbraganca\dynamicform\DynamicFormWidget;
             </div>
             <div class="panel-body container-items"><!-- widgetContainer -->
               <?php foreach ($modelsSgdnRelAluger as $i => $modelSgdnRelAluger): ?>
-                  <!-- <-?php
-                  if (!$materialModalidade->isNewRecord) {
-                      echo Html::activeHiddenInput($modelAluger, "[{$i}]ID");
-                  }
-                  ?> -->
+
                   <div class="item panel row">
-                          <div class="col-md-3" style="height: 40px">
+
+                    <div class="row">
+                        <div class="col-md-3" style="height: 40px">
                             <?= $form->field($modelSgdnRelAluger, "[{$i}]PRECARIO_ID")->dropDownList(ArrayHelper::map(SgdnRelPrecario::find()->where(['ESTADO'=>'A'])->all(),'ID','rELMATERIALMODALIDADE.mATERIAL.DESIG')
                             ,['prompt'=>'*** Material ***','id'=>'selectMaterial', 'class'=>'form-control'])?>
-                          </div>
-                          <div class="col-md-3" style="height: 40px">
-                                <?= $form->field($modelSgdnRelAluger, "[{$i}]DT_ALUGUER")->textInput() ?>
+                        </div>
+                        <?php $addon = '<span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                            </span>';
+                        ?>
+                        <div class="col-md-3" style="height: 40px">
+                            <label> Data Inico </label>
+                            <div class="input-group drp-container">
+                                <?= DateRangePicker::widget([
+                                    'model'=>$modelSgdnRelAluger,
+                                    'attribute' =>  "[{$i}]DT_ALUGUER",
+                                    'value'=>'2015-10-19 12:00 AM',
+                                    'useWithAddon'=>true,
+                                    'convertFormat'=>true,
+                                    'pluginOptions'=>[
+                                        'timePicker'=>true,
+                                        'timePickerIncrement'=>15,
+                                        'timePicker24Hour' => true,
+                                        'locale'=>['format' => 'Y-m-d H:i'],
+                                        'singleDatePicker'=>true,
+                                        'showDropdowns'=>true
+                                    ],
+                                    'options'=>['class'=>'form-control dt_ini', 'onchange'=>'getPreco(this,"dti")']
+
+                                ]).$addon ?>
+                            </div>
+                        </div>
+
+                        <?php $addon = '<span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                            </span>';
+                        ?>
+                        <div class="col-md-3" style="height: 40px">
+                            <label> Data Fim </label>
+                            <div class="input-group drp-container">
+                                <?= DateRangePicker::widget([
+                                    'model'=>$modelSgdnRelAluger,
+                                    'attribute' =>  "[{$i}]DT_DEVOLUCAO",
+                                    'value'=>'2015-10-19 12:00 AM',
+                                    'useWithAddon'=>true,
+                                    'convertFormat'=>true,
+                                    'pluginOptions'=>[
+                                        'timePicker'=>true,
+                                        'timePickerIncrement'=>15,
+                                        'timePicker24Hour' => true,
+                                        'locale'=>['format' => 'Y-m-d H:i'],
+                                        'singleDatePicker'=>true,
+                                        'showDropdowns'=>true
+                                    ],
+                                    'options'=>['class'=>'form-control dt_fim', 'onchange'=>'getPreco(this,"dtf")']
+                                ]).$addon ?>
+                            </div>
+                        </div>
+
+                            <!--------------------------------------------------------------------------->
+                          <!-- <div class="col-md-3" style="height: 40px">
+                                <-?= $form->field($modelSgdnRelAluger, "[{$i}]DT_ALUGUER")->textInput() ?>
                           </div>
                           <div class="col-md-3">
-                              <?= $form->field($modelSgdnRelAluger, "[{$i}]DT_DEVOLUCAO")->textInput() ?>
-                          </div>
+                              <-?= $form->field($modelSgdnRelAluger, "[{$i}]DT_DEVOLUCAO")->textInput() ?>
+                          </div> -->
                           <div class="col-md-3">
-                              <?= $form->field($modelSgdnRelAluger, "[{$i}]VALOR")->textInput() ?>
+                              <?=$form->field($modelSgdnRelAluger, "[{$i}]VALOR", [
+                                  'addon' => [
+                                      'prepend' => [ 'content' => '$', 'options'=>['class'=>'alert-success'],],
+                                      'append' => ['content' => '.00', 'options'=>['style' => 'font-family: Monaco, Consolas, monospace;']],
+                                  ],
+                              ]);?>
                           </div>
-                          <div class="col-md-3">
-                              <?= $form->field($modelSgdnRelAluger, "[{$i}]OBS")->textInput(['maxlength' => true]) ?>
-                          </div>
-                          <div class="col-md-1" style="padding-left: 7px;padding-top: 3px">
-                              <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
-                          </div>
+                      </div>
+                      <div class="row">
+
+                              <!-- <div class="col-md-3">
+                                  <-?= $form->field($modelSgdnRelAluger, "[{$i}]VALOR")->textInput() ?>
+                              </div> -->
+                              <div class="col-md-5">
+                                  <?= $form->field($modelSgdnRelAluger, "[{$i}]OBS")->textInput(['maxlength' => true]) ?>
+                              </div>
+                              <div class="col-md-1" style="padding-left: 7px;padding-top: 3px">
+                                  <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
+                              </div>
+
+                      </div>
+
                   </div>
               <?php endforeach; ?>
             </div>
@@ -85,7 +152,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 </div>
 <script type="text/javascript">
 
-    <?php if (!$model->isNewRecord): ?>
+    <?php if (false): ?>
         $(document).ready(function(){
 
             $("#selectPessoa").trigger("change");
@@ -101,7 +168,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
       //ajax for materials
 
-      <?php if (!$model->isNewRecord): ?>
+      <?php if (false): ?>
           $(document).ready(function(){
 
               $("#selectPessoa").trigger("change");
@@ -114,5 +181,71 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
               });
         }
+
+
+
+        function getPreco(elem,tipo)
+        {
+          if(tipo == 'dti')
+          {
+            var dthrini = $(elem).val();
+            var dthrfim = $($($(elem).parent().parent().next()).find('input')).val();
+            var res_id =   $($($(elem).parent().parent().prev()).find('select option:selected')).val();
+          }else{
+            var dthrini = $($($(elem).parent().parent().prev()).find('input')).val();
+            var dthrfim = $(elem).val();
+            var res_id =   $($($(elem).parent().parent().prev().prev()).find('select option:selected')).val();
+          }
+
+
+          if(dthrini != "" && dthrfim != "" && res_id != "")
+          {
+            $.get( '<?=Url::to(['sgdn-rel-aluguer/get-price-calculator'])?>',{id:res_id,dthrini:dthrini,dthrfim:dthrfim}, function( data ) {
+                $( "#sgdnrelaluguer-0-valor" ).val(data);$( "#sgdnrelaluguer-0-valor" ).prop('disabled', true);
+            });
+          }
+
+        }
+
+        $( ".add-item" ).on( "mouseup", function(event) {
+          setTimeout(function(){
+              var dt_ini_picker =   $('.dt_ini:last');
+              var dt_fim_picker =   $('.dt_fim:last');
+
+              jQuery(dt_ini_picker).off('change.kvdrp').on('change.kvdrp', function() {
+                    var drp = jQuery(dt_ini_picker).closest('.input-group').data('daterangepicker'), fm, to;
+                    if ($(this).val() || !drp) {
+                        return;
+                    }
+                    fm = moment().startOf('day').format('YYYY-MM-DD HH:mm') || '';
+                    to = moment().format('YYYY-MM-DD HH:mm') || '';
+                    drp.setStartDate(fm);
+                    drp.setEndDate(to);
+
+                });
+                if (jQuery(dt_ini_picker).data('daterangepicker')) { jQuery(dt_ini_picker).daterangepicker('destroy'); }
+                jQuery(dt_ini_picker).closest('.input-group').daterangepicker(daterangepicker_51dae132, function(start,end,label){
+                  var val=start.format('YYYY-MM-DD HH:mm');
+                  jQuery(dt_ini_picker).val(val).trigger('change');});
+
+                  jQuery(dt_fim_picker).off('change.kvdrp').on('change.kvdrp', function() {
+                        var drp = jQuery(dt_ini_picker).closest('.input-group').data('daterangepicker'), fm, to;
+                        if ($(this).val() || !drp) {
+                            return;
+                        }
+                        fm = moment().startOf('day').format('YYYY-MM-DD HH:mm') || '';
+                        to = moment().format('YYYY-MM-DD HH:mm') || '';
+                        drp.setStartDate(fm);
+                        drp.setEndDate(to);
+
+                    });
+                    if (jQuery(dt_fim_picker).data('daterangepicker')) { jQuery(dt_fim_picker).daterangepicker('destroy'); }
+                    jQuery(dt_fim_picker).closest('.input-group').daterangepicker(daterangepicker_51dae132, function(start,end,label){
+                      var val=start.format('YYYY-MM-DD HH:mm');
+                      jQuery(dt_fim_picker).val(val).trigger('change');});
+          }
+            ,100);
+
+        });
 
 </script>

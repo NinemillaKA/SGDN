@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\SgdnRelAluguer;
+use backend\models\SgdnRelPrecario;
 use app\models\Model;
 use backend\models\SgdnRelAluguerSearch;
 use yii\web\Controller;
@@ -34,6 +35,30 @@ class SgdnRelAluguerController extends Controller
      * Lists all SgdnRelAluguer models.
      * @return mixed
      */
+
+    public function actionGetPriceCalculator($id,$dthrini,$dthrfim)
+    {
+       /*$id = $_GET['id'];
+       $datetime1 = $_GET['dtini'];
+       $datetime2 = $_GET['dtfim'];*/
+
+       // $datetime1 = new \DateTime($dthrini);
+       // $datetime2 = new \DateTime($dthrfim);
+
+       // $interval = $dthrfim->diff($datetime1);//->format("%a");
+
+       $model = SgdnRelPrecario::find()->where(['ID' => $id])->one();
+
+       $hourdiff = round((strtotime($dthrfim) - strtotime($dthrini))/3600, 1);
+
+       //return print_r($hourdiff);
+
+       $price  = $model->PRECO * $hourdiff ;
+
+       echo $price;
+
+    }
+
     public function actionIndex()
     {
         $searchModel = new SgdnRelAluguerSearch();
@@ -65,52 +90,43 @@ class SgdnRelAluguerController extends Controller
      */
     public function actionCreate()
     {
-        $model = new SgdnRelAluguer(['scenario' => SgdnRelAluguer::SCENARIO_PESSOA]);
 
-        $modelsSgdnRelAluger = [new SgdnRelAluguer(['scenario' => SgdnRelAluguer::SCENARIO_ALUGER])];
+        $modelsSgdnRelAluger = [new SgdnRelAluguer()];
 
-        if ($model->load(Yii::$app->request->post()) ) {
-
+        if (Yii::$app->request->post()) {
           $modelsSgdnRelAluger = Model::createMultiple(SgdnRelAluguer::classname());
-
-
-          foreach ($modelsSgdnRelAluger as  $modelSgdnRelAluger) {
-            $modelSgdnRelAluger->scenario = 'default';
-          }
 
           Model::loadMultiple($modelsSgdnRelAluger, Yii::$app->request->post());
 
-          $valid = $model->validate();
-          //$valid = SgdnRelAluguer::validateMultiple($modelsSgdnRelAluger) && $valid;
+
+          $valid = SgdnRelAluguer::validateMultiple($modelsSgdnRelAluger);
 
           if ($valid) {
 
               try{
+                    $flag = false;
+                    foreach ($modelsSgdnRelAluger as $key => $modelSgdnRelAluger) {
+                        $modelSgdnRelAluger->PESSOA_ID = $_POST['pessoa_id'];
+                        $flag = $modelSgdnRelAluger->save();
+                        if (!$flag) {
 
-                  //  if ($flag = $model->save(false)) {
-                        $flag = false;
-                        foreach ($modelsSgdnRelAluger as $key => $modelSgdnRelAluger) {
+                            print_r($model->errors);
 
-                            $modelSgdnRelAluger->PESSOA_ID = $model->PESSOA_ID;
-                            if (! ($flag = $modelSgdnRelAluger->save(false))) {
-
-                                print_r($model->errors);
-                                //$transaction->rollBack();
-                                  echo "5";
-                                \Yii::$app->end();
-                                break;
-                            }
+                              echo "5";
+                            \Yii::$app->end();
+                            break;
                         }
+                    }
 
                 } catch (Exception $e) {
                       echo "2";
-                    //$transaction->rollBack();
+
                     \Yii::$app->end();
                 }
 
                 return $this->redirect(['index']);
           }else{
-            print_r($model->errors);
+            // print_r($model->errors);
             \Yii::$app->end();
           }
 
@@ -118,7 +134,7 @@ class SgdnRelAluguerController extends Controller
         }
 
         return $this->renderAjax('create', [
-            'model' => $model,
+            //'model' => $model,
             'modelsSgdnRelAluger' => $modelsSgdnRelAluger,
         ]);
     }
@@ -140,6 +156,7 @@ class SgdnRelAluguerController extends Controller
 
         return $this->renderAjax('update', [
             'model' => $model,
+            'modelsSgdnRelAluger' => $modelsSgdnRelAluger,
         ]);
     }
 

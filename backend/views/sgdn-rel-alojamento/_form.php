@@ -63,6 +63,7 @@ use backend\models\SgdnResidencia;
                             'singleDatePicker'=>true,
                             'showDropdowns'=>true
                         ]
+
                     ]).$addon ?>
                  </div>
             </div>
@@ -91,7 +92,7 @@ use backend\models\SgdnResidencia;
                   ]).$addon ?>
                </div>
             </div>
-            <div class="col-md-3" id="preco">
+            <div class="col-md-3">
                 <?=$form->field($model, 'TOTAL', [
                     'addon' => [
                         'prepend' => [ 'content' => '$', 'options'=>['class'=>'alert-success'],],
@@ -140,6 +141,15 @@ use backend\models\SgdnResidencia;
         });
     <?php endif; ?>
 
+    $(document).ready(function(){
+        $("#sgdnrelalojamento-dt_entrada").on('change',function(){
+          getPreco();
+        });
+
+        $("#sgdnrelalojamento-dt_saida").on('change',function(){
+          getPreco();
+        });
+    });
       function getResidencia(id_residencia)
       {
           $.get( '<?=Url::to(['sgdn-residencia/get-residencia'])?>',{id:id_residencia}, function( data ) {
@@ -148,10 +158,18 @@ use backend\models\SgdnResidencia;
             });
       }
 
-      function getPreco(id_aula)
+      function getPreco()
       {
-          $.get( '<?=Url::to(['sgdn-rel-alojamento/get-price-calculator'])?>',{id:id_aula}, function( data ) {
-              $( "#sgdnrelalojamento-preco" ).val(data);$( "#sgdnrelalojamento-preco" ).prop('disabled', true);
+        var dtini = $("#sgdnrelalojamento-dt_entrada").val();
+        var dtfim = $("#sgdnrelalojamento-dt_saida").val();
+        var res_id =  $("#selectResidencia option:selected").val();
+        
+        if(dtini != "" && dtfim != "" && res_id != "")
+        {
+          $.get( '<?=Url::to(['sgdn-rel-alojamento/get-price-calculator'])?>',{id:res_id,dtini:dtini,dtfim:dtfim}, function( data ) {
+              $( "#sgdnrelalojamento-total" ).val(data);$( "#sgdnrelalojamento-total" ).prop('disabled', true);
           });
+        }
+
       }
 </script>

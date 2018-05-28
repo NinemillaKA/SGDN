@@ -31,16 +31,6 @@ class SgdnRelAluguer extends \yii\db\ActiveRecord
         return 'sgdn_rel_aluguer';
     }
 
-     const SCENARIO_PESSOA = 'pessoa';
-     const SCENARIO_ALUGER = 'aluguer';
-
-     public function scenarios()
-     {
-         $scenarios = parent::scenarios();
-         $scenarios[self::SCENARIO_PESSOA] = ['PESSOA_ID'];
-         $scenarios[self::SCENARIO_ALUGER] = ['PRECARIO_ID', 'DT_ALUGUER','DT_DEVOLUCAO'];
-         return $scenarios;
-     }
 
     /**
      * @inheritdoc
@@ -48,8 +38,7 @@ class SgdnRelAluguer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['PRECARIO_ID', 'DT_ALUGUER','DT_DEVOLUCAO'], 'required'],
-            [['PESSOA_ID'], 'required','on'=>self::SCENARIO_PESSOA],
+            [['PRECARIO_ID', 'DT_ALUGUER','DT_DEVOLUCAO', 'VALOR'], 'required'],
             [['PRECARIO_ID','DT_ALUGUER', 'DT_DEVOLUCAO', 'DT_REGISTO'], 'safe'],
             [['VALOR'], 'number'],
             [['ID', 'PESSOA_ID', 'PRECARIO_ID'], 'string', 'max' => 36],
@@ -98,9 +87,11 @@ class SgdnRelAluguer extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if ($insert) {
+          $this->PRECARIO_ID = $this->PRECARIO_ID;
           $this->ID = Uuid::uuid();
           $this->DT_REGISTO = date('Y-m-d h:m:s');
           $this->ESTADO = 'A';
+
 
             return true;
          }

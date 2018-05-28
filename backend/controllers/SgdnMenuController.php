@@ -3,17 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\SgdnRelAlojamento;
-use backend\models\SgdnRelAlojamentoSearch;
+use backend\models\SgdnMenu;
+use backend\models\SgdnMenuSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\SgdnResidencia;
 
 /**
- * SgdnRelAlojamentoController implements the CRUD actions for SgdnRelAlojamento model.
+ * SgdnMenuController implements the CRUD actions for SgdnMenu model.
  */
-class SgdnRelAlojamentoController extends Controller
+class SgdnMenuController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,30 +29,13 @@ class SgdnRelAlojamentoController extends Controller
         ];
     }
 
-    public function actionGetPriceCalculator($id,$dtini,$dtfim)
-    {
-        $id = $_GET['id'];
-        $datetime1 = $_GET['dtini'];
-        $datetime2 = $_GET['dtfim'];
-
-        $datetime1 = new \DateTime($datetime1);
-        $datetime2 = new \DateTime($datetime2);
-
-        $interval = $datetime2->diff($datetime1)->format("%a");
-
-        $model = SgdnResidencia::find()->where(['ID' => $id])->one();
-        $price  = $model->PRECO_DIA * $interval ;
-
-        echo $price;
-    }
-
     /**
-     * Lists all SgdnRelAlojamento models.
+     * Lists all SgdnMenu models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SgdnRelAlojamentoSearch();
+        $searchModel = new SgdnMenuSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -63,40 +45,39 @@ class SgdnRelAlojamentoController extends Controller
     }
 
     /**
-     * Displays a single SgdnRelAlojamento model.
+     * Displays a single SgdnMenu model.
      * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        return $this->renderAjax('view', [
+        return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new SgdnRelAlojamento model.
+     * Creates a new SgdnMenu model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SgdnRelAlojamento();
-        // var_dump($model);
-        if ($model->load(Yii::$app->request->post())) {
-
-              if($model->save())
-                  return $this->redirect(['index']);
+        $model = new SgdnMenu();
+        $controllers = " ";
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->ID]);
         }
 
-        return $this->renderAjax('create', [
+        return $this->render('create', [
             'model' => $model,
+            'controllers' => $controllers,
         ]);
     }
 
     /**
-     * Updates an existing SgdnRelAlojamento model.
+     * Updates an existing SgdnMenu model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -106,19 +87,17 @@ class SgdnRelAlojamentoController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-
-            if($model->save())
-                return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->ID]);
         }
 
-        return $this->renderAjax('update', [
+        return $this->render('update', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Deletes an existing SgdnRelAlojamento model.
+     * Deletes an existing SgdnMenu model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -126,27 +105,21 @@ class SgdnRelAlojamentoController extends Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        $model->ESTADO = 'I';
-        if($model->save()){
-            return $this->redirect(['index']);
-        }else{
-          print_r('Some Errors!');
-        }
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the SgdnRelAlojamento model based on its primary key value.
+     * Finds the SgdnMenu model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return SgdnRelAlojamento the loaded model
+     * @return SgdnMenu the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SgdnRelAlojamento::findOne($id)) !== null) {
+        if (($model = SgdnMenu::findOne($id)) !== null) {
             return $model;
         }
 
