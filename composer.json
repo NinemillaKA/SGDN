@@ -24,7 +24,8 @@
         "kartik-v/yii2-widget-fileinput": "@dev",
         "2amigos/yii2-google-maps-library": "*",
         "kartik-v/yii2-widget-activeform": "@dev",
-        "kartik-v/yii2-date-range": "*"
+        "kartik-v/yii2-date-range": "*",
+        "execut/yii2-widget-bootstraptreeview": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

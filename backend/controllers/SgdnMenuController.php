@@ -26,8 +26,58 @@ class SgdnMenuController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-        ];
+            // 'access' => [
+            //                'class' => \yii\filters\AccessControl::className(),
+            //                'rules' => [
+            //                    [
+            //                        'allow' => true,
+            //                        'matchCallback' => function ($rule, $action) {
+    				// 					return \Yii::$app->Helper->checkAccess($this->id,$action->id);
+    				// 				}
+            //                    ],
+            //                ],
+            //            ],
+         ];
     }
+
+
+    /**
+*
+*
+*/
+public function actionGetPermissions()
+{
+  $id_perfil = $_POST['id_perfil']; // !!!
+
+  if($id_perfil == '')
+  {
+    $id_perfil = NULL;
+  }
+  return json_encode(\Yii::$app->Helper->permissionsTree($id_perfil));
+}
+
+
+ /**
+   * get controller actions list
+   * @param string $controller_id
+   * @return mixed
+   */
+  public function actionGetControllerActions()
+  {
+       if ($controller_id = Yii::$app->request->post('controller_id')) {
+        $actions = \Yii::$app->Helper->getActions($controller_id);
+
+            if ($actions > 0) {
+                foreach ($actions as $key=>$value){
+                    print_r($value);
+                    echo "<option value='" . $value . "'>" . $value . "</option>";
+                }
+            } else{
+                  echo "<option>-</option>";
+            }
+      }
+
+  }
 
     /**
      * Lists all SgdnMenu models.
@@ -65,15 +115,27 @@ class SgdnMenuController extends Controller
     public function actionCreate()
     {
         $model = new SgdnMenu();
-        $controllers = " ";
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
-        }
+        $controllers = \Yii::$app->Helper->getControllers();
 
-        return $this->render('create', [
-            'model' => $model,
-            'controllers' => $controllers,
-        ]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            if($model->save()){
+
+              Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Your registry is saved.'));
+              return $this->redirect(['index']);
+            }else{
+              print_r($model->errors);
+              var_dump($model->FLAG_DISPLAY);
+              \Yii::$app->end();
+            }
+
+            // return $this->redirect(['view', 'id' => $model->ID]);
+        }elseif(Yii::$app->request->isAjax){
+          return $this->renderAjax('create', [
+                 'model' => $model,
+                 'controllers' => $controllers
+          ]);
+        }
     }
 
     /**
@@ -86,14 +148,24 @@ class SgdnMenuController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $controllers = \Yii::$app->Helper->getControllers();
+        $actions = \Yii::$app->Helper->getActions($model->CONTROLLER);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+            Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Your registry is updated.'));
+            return $this->redirect(['index']);
+        }elseif(Yii::$app->request->isAjax){
+            return $this->renderAjax('update', [
+                   'model' => $model,
+                   'controllers' => $controllers,
+                   'actions' => $actions,
+            ]);
+        // }else{
+        //     return $this->renderAjax('update', [
+        //            'model' => $model,
+        //            'controllers' => $controllers
+        //     ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**

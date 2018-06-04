@@ -14,6 +14,9 @@ return [
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
+        'Helper' => [
+                 'class' => 'backend\components\Helper', 
+            ],
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],

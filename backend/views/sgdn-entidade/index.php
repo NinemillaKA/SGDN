@@ -11,12 +11,13 @@ $this->title = 'Sgdn Entidades';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sgdn-entidade-index">
+
   <div class="box box-widget">
       <div class="box-header with-border">
           <!--h1><?= Html::encode($this->title) ?></h1-->
           <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-          <?= Html::a('Criar Entidade', ['create'], ['class' => 'btn btn-flat btn-primary pull-right']) ?>
+          <?= Html::a('Registar', ['create'], ['class' => 'btn btn-flat btn-primary pull-right']) ?>
 
         </div>
         <div class="box-body">

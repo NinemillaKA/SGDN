@@ -19,7 +19,6 @@ class SgdnRelPerfilSearch extends SgdnRelPerfil
     {
         return [
             [['ID', 'DESIG', 'DESCR', 'ESTADO', 'DT_REGISTO', 'DT_UPDATE'], 'safe'],
-            [['USER_ID'], 'integer'],
         ];
     }
 
@@ -58,8 +57,7 @@ class SgdnRelPerfilSearch extends SgdnRelPerfil
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'USER_ID' => $this->USER_ID,
+        $query->andFilterWhere([            
             'DT_REGISTO' => $this->DT_REGISTO,
             'DT_UPDATE' => $this->DT_UPDATE,
         ]);

@@ -2,10 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
-
-$this->registerJsFile(Yii::getAlias('@web').'/js/plugins/bootstrap/bootstrap-treeview.js',['depends' => [\yii\web\JqueryAsset::className()],'position'=>$this::POS_HEAD]);
-$this->registerCssFile(Yii::getAlias('@web').'/css/bootstrap/bootstrap-treeview.css',['depends' => [\yii\web\JqueryAsset::className()],'position'=>$this::POS_HEAD]);
+$this->registerJsFile(Yii::getAlias('@web').'/js/bootstrap-treeview-1.2.0/src/js/bootstrap-treeview.js',['depends' => [\yii\web\JqueryAsset::className()],'position'=>$this::POS_HEAD]);
+$this->registerCssFile(Yii::getAlias('@web').'/js/bootstrap-treeview-1.2.0/src/css/bootstrap-treeview.css',['depends' => [\yii\web\JqueryAsset::className()],'position'=>$this::POS_HEAD]);
 
 
 /* @var $this yii\web\View */
@@ -51,16 +51,17 @@ $this->registerCssFile(Yii::getAlias('@web').'/css/bootstrap/bootstrap-treeview.
               <?= $form->field($model, 'ESTADO')->dropDownList(['A'=>Yii::t('app', 'Enabled'),'I'=>Yii::t('app', 'Disabled')],['prompt' => Yii::t('app', '-- Select a State --'), 'class'=>'form-control select'])->label(false)?>
           </div>
           <?php endif;?>
-  </div>
-  <div class="col-md-6">
+    </div>
+    <div class="col-md-6">
          <label class="col-md-12 pull-left"><?=Yii::t('app', 'Permissions')?>:</label>
-     <span id="_permissoes" class="treeview col-md-12">
+         <span id="_permissoes" class="treeview col-md-12">
               <ul class="list-group">
               </ul>
-           </span>
-      </div>
-      <div id="ckecked_permissions">
-      </div>
+         </span>
+
+    </div>
+    <div id="ckecked_permissions">
+    </div>
 </div>
 
 <?php
@@ -91,16 +92,17 @@ $(document).ready(function(){
 		return true;
 	});
 
+  // change this !!!
 	if( $('#sgdnrelperfil-id').length )
 	{
-		var id = $('#sgdn-rel-perfil-id').val();
+		var id = $('#sgdnrelperfil-id').val();
 	}else{
 		var id = null;
 	}
 
 	$.post(
 		'<?=Url::to(['sgdn-menu/get-permissions'])?>',
-		{id_perfil: id},
+		{id_perfil: id},  // something wrong here
 		function(res){
 			var $tree = $('#_permissoes').treeview({
 				data: res,
@@ -124,4 +126,5 @@ $(document).ready(function(){
 	);
 
 	});
+
 </script>

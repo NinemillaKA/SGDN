@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <div class="box box-widget">
       <div class="box-header with-border">
-              <?= Html::button('Registar', ['onclick' => 'js:create("sgdn-rel-aluguer/create")', 'class' => 'pull-right btn btn-flat btn-primary']) ?>
+              <?= Html::button('Registar', ['onclick' => 'js:create("sgdn-rel-perfil/create")', 'class' => 'pull-right btn btn-flat btn-primary']) ?>
       </div>
       <div class="box-body">
           <?= GridView::widget([
@@ -29,37 +29,38 @@ $this->params['breadcrumbs'][] = $this->title;
                       }
                    },
                   'columns' => [
-                      ['class' => 'yii\grid\SerialColumn'],
+                            ['class' => 'yii\grid\SerialColumn'],
 
-                  'ID',
-                  'USER_ID',
-                  'DESIG',
-                  'DESCR',
-                  'ESTADO',
-                  //'DT_REGISTO',
-                  //'DT_UPDATE',
+                        'DESIG',
+                        'DESCR',
+                        'ESTADO',
+                        //'DT_REGISTO',
+                        //'DT_UPDATE',
 
-                  [
-                    'attribute'=>'ESTADO',
-                    'value'=>function($model){return ($model->ESTADO == 'A')?'Activo':'Inactivo';}
+                        [
+                          'attribute'=>'ESTADO',
+                          'value'=>function($model){return ($model->ESTADO == 'A')?'Activo':'Inactivo';}
+                        ],
+                        [
+                          'class' => 'yii\grid\ActionColumn',
+                          'template' => '{view}{update}{delete}',
+                          'buttons' => [
+                                'view' => function($url, $model, $key) {
+                                      return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', '#', [
+                                        'onclick' => 'view("' .$url. '")',
+                                      ]);
+                                  },
+                                'update' => function($url, $model, $key) {
+                                      return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', [
+                                        'onclick' => 'update("' .$url. '")',
+                                      ]);
+                                },
+                           ],
+
+                        ],
                   ],
-                  [
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{view}{update}{delete}',
-                    'buttons' => [
-                          'view' => function($url, $model, $key) {
-                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', '#', [
-                                  'onclick' => 'view("' .$url. '")',
-                                ]);
-                            },
-                          'update' => function($url, $model, $key) {
-                                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', [
-                                  'onclick' => 'update("' .$url. '")',
-                                ]);
-                          },
-                     ],
-
-                  ],
-                ],
-          ]); ?>
+           ]); ?>
+        </div>
+    </div>
 </div>
+<div id="hidden-content"></div>

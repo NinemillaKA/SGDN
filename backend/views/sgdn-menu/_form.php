@@ -2,36 +2,28 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use backend\models\SgdnMenu;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnMenu */
 /* @var $form yii\widgets\ActiveForm */
+
+if(isset($actions))
+{
+	$menu_actions = $actions;
+}else{
+	$menu_actions = [];
+}
+
 ?>
+
+
 
 <div class="sgdn-menu-form">
 
     <?php $form = ActiveForm::begin(['id' => 'sgdn-menu-form', 'options'=>['class'=>'']]); ?>
-
-    <!-- <-?= $form->field($model, 'ID')->textInput(['maxlength' => true]) ?>
-
-    <-?= $form->field($model, 'DESIG')->textInput(['maxlength' => true]) ?>
-
-    <-?= $form->field($model, 'DESCR')->textInput(['maxlength' => true]) ?>
-
-    <-?= $form->field($model, 'CONTROLLER')->textInput(['maxlength' => true]) ?>
-
-    <-?= $form->field($model, 'ESTADO')->textInput(['maxlength' => true]) ?>
-
-    <-?= $form->field($model, 'DT_REGISTO')->textInput() ?>
-
-    <-?= $form->field($model, 'DT_UPDATE')->textInput() ?>
-
-    <-?= $form->field($model, 'ACTION')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <-?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div> -->
 
     <div class="row">
     <div class="col-md-6">
@@ -50,7 +42,7 @@ use yii\helpers\Url;
                                                             "' . Url::toRoute('get-controller-actions') . '",
                                                             {controller_id: $(this).val()},
                                                             function(res){
-                                                                $("#sgdn-menu-action").html(res);
+                                                                $("#sgdnmenu-action").html(res);
                                                             }
                                                         );
                                                     ',])->label(false) ?>
@@ -64,12 +56,12 @@ use yii\helpers\Url;
     <div class="col-md-6">
       <div class="form-group">
             <label class="control-label"><?=$model->getAttributeLabel('DESCR')?></label>
-            <?= $form->field($model, 'DESCR')->textInput(['maxlength' => true, 'class'=>'form-control'])->label(false) ?>
+            <?= $form->field($model, 'DESCR')->dropDownList(ArrayHelper::map($model->getIconsList(),'ID',function($item){return Html::decode('<span class="'.$item['VALUE'].'"></span>');}),['encode'=>true, 'prompt' => Yii::t('app', '-- Select a icon --'), 'class'=>'form-control select'])->label(false) ?>
         </div>
 
         <div class="form-group">
-            <label class="control-label"><?=$model->getAttributeLabel('pg_menu_ID')?></label>
-            <?= $form->field($model, 'MENU_ID')->dropDownList(ArrayHelper::map(PgMenu::find()->all(), 'ID', 'DESIG'),['class'=>'form-control select','prompt'=>Yii::t('app', '-- Select a Parent Menu --')])->label(false) ?>
+            <label class="control-label"><?=$model->getAttributeLabel('MENU_ID')?></label>
+            <?= $form->field($model, 'MENU_ID')->dropDownList(ArrayHelper::map(SgdnMenu::find()->all(), 'ID', 'DESIG'),['class'=>'form-control select','prompt'=>Yii::t('app', '-- Select a Parent Menu --')])->label(false) ?>
         </div>
 
         <?php if(!$model->isNewRecord):?>
@@ -91,13 +83,3 @@ use yii\helpers\Url;
     <?php ActiveForm::end(); ?>
 
 </div>
-
-<script>
-$(document).ready(function(){
-  $('#sgdn_menu-flag_display').iCheck({
-    checkboxClass: 'icheckbox_minimal-grey',
-    radioClass: 'iradio_minimal',
-    increaseArea: '20%' // optional
-  });
-});
-</script>

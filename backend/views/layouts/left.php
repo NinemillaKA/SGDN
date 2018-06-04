@@ -24,13 +24,15 @@
               </span>
             </div>
         </form>
-        <!-- /.search form -->
+        <!-- /.search form  \Yii::$app->Helper->displayMenu() -->
 
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
                     ['label' => 'Menu Navegation', 'options' => ['class' => 'header']],
+                      ['label' => 'Menu', 'icon' => 'dashboard', 'url' => ['/sgdn-menu']],
+                      ['label' => 'Perfil', 'icon' => 'dashboard', 'url' => ['/sgdn-rel-perfil']],
                       ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/']],
                       [
                         'label' => 'Parametrizacao',
@@ -57,18 +59,19 @@
                                                     'items' => [
                                                                   ['label' => 'Tipos', 'icon'    => 'fal fa-question', 'url' => ['/sgdn-pr-material-tp'],],
                                                                   ['label' => 'Marcas', 'icon'    => 'fal fa-slack', 'url' => ['/sgdn-pr-material-marca'],],
+                                                                  ['label' => 'Preçario', 'icon'    => 'fal fa-money', 'url' => ['/sgdn-rel-precario'],],
 
                                                      ]
                                              ],
 
-                                             [
-                                               'label' => 'Preciario',
-                                               'icon' => 'fal fa-money',
-                                               'url' => ['/'],
-                                                     'items' => [
-                                                                   ['label' => 'Materiais', 'icon'    => 'fal fa-wrench', 'url' => ['/sgdn-rel-precario'],],
-                                                      ]
-                                              ],
+                                             // [
+                                             //   'label' => 'Preciario',
+                                             //   'icon' => 'fal fa-money',
+                                             //   'url' => ['/'],
+                                             //         'items' => [
+                                             //                       ['label' => 'Materiais', 'icon'    => 'fal fa-wrench', 'url' => ['/sgdn-rel-precario'],],
+                                             //          ]
+                                             //  ],
                                ]
                        ],
 
@@ -88,7 +91,7 @@
                      ],
 
                     [
-                      'label' => 'Armazem',
+                      'label' => 'Stock',
                       'icon' => ' fa-cubes',
                       'url' => ['/'],
                       'items' => [
@@ -119,11 +122,16 @@
                           'icon' => ' far fa-building',
                           'url' => '#',
                           'items' => [
+
+
                                         ['label' => 'Cadastro', 'icon' => 'far  fa-plus-circle', 'url' => ['/sgdm-instrutor'],],
                                         ['label' => 'Matricula', 'icon' => 'far fa-money', 'url' => ['/sgdn-rel-matricula'],],
                                         ['label' => 'Contracto', 'icon' => 'far fa-scissors', 'url' => ['/sgdn-rel-instrutor-modalidade'],],
+
                                         ['label' => 'Emprestimo','icon' => 'fal fa-exchange', 'url' => ['/sgdn-rel-aluguer'],],
+
                                         ['label' => 'Alojamento','icon' => 'fal fa-home', 'url' => ['/sgdn-rel-alojamento'],],
+
                                         ['label' => 'Viagen','icon' => 'fal fa-tree', 'url' => ['/sgdn-viagen'],],
                                         ['label' => 'Inscricao Viagen','icon' => 'fal fa-tree', 'url' => ['/sgdn-rel-inscricao-viagen'],],
                                         ['label' => 'Responsavel Residencia','icon' => 'fal fa-home', 'url' => ['/sgdn-rel-responsavel'],],

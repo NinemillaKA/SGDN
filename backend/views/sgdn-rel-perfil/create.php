@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'id' => 'create-modal',
     'size' => 'modal-lg',
     'header' => '<strong>Registar Perfil</strong>',
-    'footer' => Html::button('<i class="fa fa-save"></i> Confirmar', ['onclick' => '$("#ggg").submit();', 'class' => 'btn btn-flat btn-primary']),
+    'footer' => Html::button('<i class="fa fa-save"></i> Confirmar', ['onclick' => '$("#sgdn-rel-perfil-form").submit();', 'class' => 'btn btn-flat btn-primary']),
   ]);
 ?>
 
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model
     ]) ?>
 
 </div>

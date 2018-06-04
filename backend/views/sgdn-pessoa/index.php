@@ -12,37 +12,41 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sgdn-pessoa-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+  <div class="box box-widget">
+      <div class="box-header with-border">
+          <!--h1><?= Html::encode($this->title) ?></h1-->
+          <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Sgdn Pessoa', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+          <?= Html::a('Registar', ['create'], ['class' => 'btn btn-flat btn-primary pull-right']) ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        </div>
+        <div class="box-body">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
 
-            //'ID',
-            //'LOCALIDADE_ID',
-            'NOME',
-            //'nATURALIDADE.NACIONALIDADE',
-          'lOCALIDADE.NOME',
-            //'CARGO',
+                    //'ID',
+                    //'LOCALIDADE_ID',
+                    'NOME',
+                    //'nATURALIDADE.NACIONALIDADE',
+                  'lOCALIDADE.NOME',
+                    //'CARGO',
 
-            'SEXO',
-            'pRESTADOCIVIL.DESIG',
-            'DT_NASC',
-            'nATURALIDADE.NACIONALIDADE',
-            //'NATURALIDADE_ID',
-            //'URL_FOTO:url',
-            //'DT_REGISTO',
-            //'ESTADO',
-            //'SGDN_PESSOA_ID',
+                    'SEXO',
+                    'pRESTADOCIVIL.DESIG',
+                    'DT_NASC',
+                    'nATURALIDADE.NACIONALIDADE',
+                    //'NATURALIDADE_ID',
+                    //'URL_FOTO:url',
+                    //'DT_REGISTO',
+                    //'ESTADO',
+                    //'SGDN_PESSOA_ID',
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                    ['class' => 'yii\grid\ActionColumn'],
+                ],
+            ]); ?>
+        </div>
+  </div>
 </div>
