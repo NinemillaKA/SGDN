@@ -139,7 +139,7 @@ class Helper extends Component
 
 		if($menu !== NULL && $user!==NULL)
 		{
-			$has_permission = SgdnRelPerfilMenu::find()->where(['MENU_ID'=>$menu->ID,'pg_perfil_ID'=>$user->pg_perfil_ID])->one();
+			$has_permission = SgdnRelPerfilMenu::find()->where(['MENU_ID'=>$menu->ID,'pg_perfil_ID'=>$user->sgdn_rel_perfil_ID])->one();
 
 			if($has_permission != NULL)
 				return true;

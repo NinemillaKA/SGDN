@@ -16,7 +16,6 @@ use \Faker\Provider\Uuid;
  * @property string $DT_REGISTO
  * @property string $ESTADO
  *
- * @property SgdmInstrutor $iNSTRUTOR
  * @property SgdnPessoa $pESSOA
  * @property SgdnViagen $vIAGEM
  */

@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnRelAula */
 
-$this->title = $model->DESIG;
+// $this->title = $model->DESIG;
 $this->params['breadcrumbs'][] = ['label' => 'Sgdn Rel Aulas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -37,6 +37,61 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p> <br>
 </div>
+
+<div class="alert alert-info alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4><i class="icon fa fa-info"></i> Alert! <?php echo date("M-d-Y h:m:s",strtotime($model->HORA_INICIO)); ?></h4>
+     <!-- Info alert preview. This alert is dismissable. -->
+
+    <h3>
+        <!-- Display the countdown timer in an element -->
+
+        <p id="demo"></p>
+
+        <script>
+
+            // $model->HORA_FIM = $model->DT_FIM[1];
+            // $model->DT_FIM = $model->DT_FIM[0];
+
+            var countDownDate = new Date("<?php echo date("M-d-Y h:m:s",strtotime($model->HORA_INICIO)); ?> ");
+            // var data_
+            console.log(countDownDate);
+            // Set the date we're counting down to
+            // var countDownDate = "<-?php echo $model->DT_INICIO ?>";
+            // var countDownDate = new Date("Sep 5, 2018 15:37:25").getTime();
+
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+
+              // Get final date and time
+              var finalDate = new Date().getTime();
+              // var countDownDate = "<-? $model->DT_INICIO = implode($model->DT_INICIO, " ".$model->HORA_INICIO) ?>";
+              // var finalDate = "<? $model->DT_INICIO = implode($model->DT_INICIO, " ".$model->HORA_INICIO) ?>";
+
+              // Find the distance between now an the count down date
+              var distance = countDownDate - finalDate;
+
+              // Time calculations for days, hours, minutes and seconds
+              var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+              var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+              var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+              // Display the result in the element with id="demo"
+              document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+              + minutes + "m " + seconds + "s ";
+
+              // If the count down is finished, write some text
+              if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "EXPIRED";
+                //call Avaliations pages
+              }
+            }, 1000);
+        </script>
+    </h3>
+</div>
+<br>
 
 <div class="row">
        <div class="col-md-7">

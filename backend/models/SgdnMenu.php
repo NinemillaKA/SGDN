@@ -127,16 +127,28 @@ class SgdnMenu extends \yii\db\ActiveRecord
   	{
   		$menu = [];
 
+      $user = User::findOne(Yii::$app->user->ID);
+
+
+      $user_menus = (new \yii\db\Query())
+                      ->select('MENU_ID')
+                      ->from('sgdn_rel_perfil_menu')
+                      ->where(['PERFIL_ID'=> $user->sgdn_rel_perfil_ID]);
+                      //->all();
+
+      //$has_permission = SgdnRelPerfilMenu::find()->where(['PERFIL_ID'=>$user->pg_perfil_ID])->one();
+
   		$root_menus = SgdnMenu::find()
   					->where(['is', 'MENU_ID', NULL])
+            ->andWHERE(['IN','ID',$user_menus])
   					->orderBy(['DESIG' => SORT_ASC])
   					->all();
 
   		foreach($root_menus as $root_menu) //ciclo menus pai
   		{
-
   			$child_menus = SgdnMenu::find()
   					->where(['MENU_ID'=>$root_menu->ID,'FLAG_DISPLAY'=>true])
+            ->andWHERE(['IN','ID',$user_menus])
   					->orderBy(['DESIG' => SORT_DESC])
   					->all();
 
@@ -147,63 +159,69 @@ class SgdnMenu extends \yii\db\ActiveRecord
 
   				foreach($child_menus as $child_menu) //ciclo filhos
   				{
-    					//verifica se filho menu activo
-    					if(Yii::$app->controller->id == $child_menu->CONTROLLER && Yii::$app->controller->action->id == $child_menu->ACTION)
-    					{
-    						$active = 'active';
-    						$flag_isactive = true;
-    						$icon_highligth = 'style="color:#006cac"';
-    					}else{
-    						$active = '';
-    						$icon_highligth = '';
-    					}
 
-    					//verifica filho tem link
-    					if($child_menu->CONTROLLER !== '' && $child_menu->ACTION !== '')
-    					{
-    						$url = Url::to(['//'.$child_menu->CONTROLLER.'/'.$child_menu->ACTION.'']);
-    					}else{
-    						$url = '#';
-    					}
-
-    					if($child_menu->FLAG_DISPLAY)
-    					{
-    						//$sub_menu .= '<li class="'.$active.'">';
-    						//$sub_menu .= '<a href="'.$url.'"><span class="fa fa-angle-right" '.$icon_highligth.'></span><span class="xn-text">'.$child_menu->DESIG.'</span></a>';
-    						//$sub_menu .= '</li>';
-                //['label' => 'Cadastro', 'icon' => 'far  fa-plus-circle', 'url' => ['/sgdm-instrutor'],],
-                $sub_menu[] = ['label' => $child_menu->DESIG, 'icon' => 'far  fa-plus-circle', 'url' => $url,];
-
-    					}
-  				}
-  				//Se filho activo expande menu pai
-  				if($flag_isactive)
-  				{
-  					//$menu .= '<li class="xn-openable active">';
-  				}else{
-  					//$menu .= '<li class="xn-openable">';
+              $sub_menu = array_merge($sub_menu,$this->getSubMenuDisplay($child_menu, $user_menus));
   				}
 
-  				/*$menu .= '<a href="#"><span class="fa fa-circle-o"></span><span class="xn-text">'.$root_menu->DESIG.'</span></a>';
-  				$menu .= '<ul>';
-  				$menu .= $sub_menu;
-  				$menu .= '</ul>';
-  				$menu .= '</li>';*/
 
           $menu[] =   [
                         'label' => $root_menu->DESIG,
-                        'icon' => ' far fa-building',
+                        'icon' => $root_menu->DESCR,
                         'url' => '#',
                         'items' => $sub_menu
                       ];
   			}else{ //caso pai não tenha filho
 
-  				if(Yii::$app->controller->id == $root_menu->CONTROLLER && Yii::$app->controller->action->id == $root_menu->ACTION)
-  				{
-  					//$active = 'class="active"';
-  				}else{
-  					//$active = '';
-  				}
+  				if($root_menu->CONTROLLER !== NULL )
+    				{
+    					$url = Url::to(['//'.$root_menu->CONTROLLER.'/'.$root_menu->ACTION.'']);
+    				}else{
+    					$url = '#';
+    				}
+
+            $menu[] =   [
+                          'label' => $root_menu->DESIG,
+                          'icon' => $root_menu->DESCR,
+                          'url' => $url
+                        ];
+    			}
+    		}
+
+      //print_r($menu); \Yii::$app->end();
+  		return $menu;
+  	}
+
+    /*
+    *
+    */
+    protected function getSubMenuDisplay($root_menu,$user_menus)
+    {
+      $menu = [];
+
+      $child_menus = SgdnMenu::find()
+          ->where(['MENU_ID'=>$root_menu->ID,'FLAG_DISPLAY'=>true])
+          ->andWHERE(['IN','ID',$user_menus])
+          ->orderBy(['DESIG' => SORT_DESC])
+          ->all();
+
+      if(count($child_menus)>0) //veirfica tem filhos
+      {
+        $sub_menu = [];
+        $flag_isactive = false;
+
+        foreach($child_menus as $child_menu) //ciclo filhos
+        {
+            $sub_menu = array_merge($sub_menu,$this->getSubMenuDisplay($child_menu, $user_menus));
+        }
+
+        $menu[] =   [
+                      'label' => $root_menu->DESIG,
+                      'icon' => $root_menu->DESCR,
+                      'url' => '#',
+                      'items' => $sub_menu
+                    ];
+        }
+        else{ //caso pai não tenha filho
 
   				if($root_menu->CONTROLLER !== NULL )
   				{
@@ -212,24 +230,16 @@ class SgdnMenu extends \yii\db\ActiveRecord
   					$url = '#';
   				}
 
-  			/*	$menu .= '<li '.$active.'>';
-  				$menu .= '<a href="'.$url.'"><span class="fa fa-circle-o"></span>'.$root_menu->DESIG.'</a>';
-  				$menu .= '</li>';*/
 
           $menu[] =   [
                         'label' => $root_menu->DESIG,
-                        'icon' => ' far fa-building',
+                        'icon' => $root_menu->DESCR,
                         'url' => $url
                       ];
   			}
 
-
-
-  		}
-
-
-  		return $menu;
-  	}
+        return $menu;
+    }
 
 
   	/**
@@ -358,7 +368,44 @@ class SgdnMenu extends \yii\db\ActiveRecord
     public function getIconsList()
     {
       return [
-              ['ID'=>'fa fa-fw fa-adjust', 'VALUE'=>'fa fa-fw fa-adjust'],
+              ['ID'=>'dashboard', 'VALUE'=>'dashboard'], //Dashboard
+              ['ID'=>'fa-list-ul', 'VALUE'=>'fa-list-ul'], //Menu
+              ['ID'=>'fa-smile-o', 'VALUE'=>'faf fa-smile-o'], //Perfil
+              ['ID'=>'fa-user', 'VALUE'=>'fa-user'],
+
+              ['ID'=>'fa-cog', 'VALUE'=>'fa-cog'], //parametrização
+              ['ID'=>'fa-info-circle', 'VALUE'=>'fa-info-circle'], //Informacional
+                  ['ID'=>'fa-envelope', 'VALUE'=>'fa-envelope'],//Contatos
+                  ['ID'=>'fa-file-pdf-o', 'VALUE'=>'fa-file-pdf-o'], // Documentos
+                  ['ID'=>'fa-street-view', 'VALUE'=>'fa-street-view'], // Estado Civil
+              ['ID'=>'fa-wrench', 'VALUE'=>'fa-wrench'], // Materiais
+                  ['ID'=>'fa-question', 'VALUE'=>'fa-question'], //Tipos
+                  ['ID'=>'fa-slack', 'VALUE'=>'fa-slack'], //Marcas
+                  ['ID'=>'fa-money', 'VALUE'=>'fa-money'], //Preçario
+              ['ID'=>'fab fa-group', 'VALUE'=>'fa-group'], // Pessoas
+              ['ID'=>'fa-anchor', 'VALUE'=>'fa-anchor'], // Spots
+              ['ID'=>'fa-home', 'VALUE'=>'fa-home'], // Entidades && Alojamento
+              ['ID'=>'fa-bank', 'VALUE'=>'fa-bank'], // Residencia
+
+              ['ID'=>'fa-cubes', 'VALUE'=>'fa-cubes'], //Materiais
+
+              ['ID'=>'fa-fa-bank', 'VALUE'=>'fa-bank'], // Escola
+                  ['ID'=>'fa-xing', 'VALUE'=>'fa-xing'], // Modalidades
+                  ['ID'=>'fa-leanpub', 'VALUE'=>'fa-leanpub'], // Aulas
+                  ['ID'=>'fa-calendar', 'VALUE'=>'fa-calendar'], // Calendar
+                  ['ID'=>'fa-user-plus', 'VALUE'=>'fa-user-plus'], //Alunos && Instructores
+
+
+              ['ID'=>'fa-building', 'VALUE'=>'fa-building'], // Office
+                  ['ID'=>'fa-plus-circle', 'VALUE'=>'fa-plus-circle'], // Cadastro
+                  // ['ID'=>'', 'VALUE'=>'far fa-money'], // Matricula
+                  ['ID'=>'fa-scissors', 'VALUE'=>'fa-scissors'], // Contracto
+                  ['ID'=>'fa-exchange', 'VALUE'=>'fa-exchange'], // Aluguer
+                  // ['ID'=>'', 'VALUE'=>'fa-fa-home'], //  Alojamento
+                  ['ID'=>'fa-tree', 'VALUE'=>'fa-tree'], // Viagen
+                  // ['ID'=>'', 'VALUE'=>'fal fa-tree'], // Inscricao Viagen
+                  ['ID'=>'fa-user-secret', 'VALUE'=>'fa-user-secret'], // Responsavel Residencia
+
       ];
     }
 

@@ -56,7 +56,7 @@ if(isset($actions))
     <div class="col-md-6">
       <div class="form-group">
             <label class="control-label"><?=$model->getAttributeLabel('DESCR')?></label>
-            <?= $form->field($model, 'DESCR')->dropDownList(ArrayHelper::map($model->getIconsList(),'ID',function($item){return Html::decode('<span class="'.$item['VALUE'].'"></span>');}),['encode'=>true, 'prompt' => Yii::t('app', '-- Select a icon --'), 'class'=>'form-control select'])->label(false) ?>
+            <?= $form->field($model, 'DESCR')->dropDownList(ArrayHelper::map($model->getIconsList(),'ID','VALUE'),['prompt' => Yii::t('app', '-- Select a Icon --'), 'class'=>'form-control select'])->label(false) ?>
         </div>
 
         <div class="form-group">

@@ -14,6 +14,7 @@ use dosamigos\google\maps\Map;
 use dosamigos\google\maps\services\DirectionsRequest;
 use dosamigos\google\maps\overlays\Polygon;
 use dosamigos\google\maps\layers\BicyclingLayer;
+use dosamigos\google\maps\services\DirectionsClient;
 ?>
 
 <?=
@@ -23,111 +24,128 @@ use dosamigos\google\maps\layers\BicyclingLayer;
 ])
 ?>
 <div class="box box-widget">
-    <!-- <div class="row"> -->
+
         <div class="box-body">
-            <?php
-                  $coord = new LatLng(['lat' => 39.720089311812094, 'lng' => 2.91165944519042]);
-                  $map = new Map([
-                  'center' => $coord,
-                  'zoom' => 14,
-                  ]);
 
-                  // lets use the directions renderer
-                  $home = new LatLng(['lat' => 39.720991014764536, 'lng' => 2.911801719665541]);
-                  $school = new LatLng(['lat' => 39.719456079114956, 'lng' => 2.8979293346405166]);
-                  $santo_domingo = new LatLng(['lat' => 39.72118906848983, 'lng' => 2.907628202438368]);
+            <div id="gmap0-map-canvas" style="width:100%">
+                <?php
+                      // $coord = new LatLng(['lat' => 39.720089311812094, 'lng' => 2.91165944519042]);
+                      // -23.757389
+                      $coord = new LatLng(['lat' => 15.265812, 'lng' => -23.757389]);
+                      $map = new Map([
+                      'center' => $coord,
+                      'zoom' => 14,
+                      'width'=>'100%',
+                      ]);
 
-                  // setup just one waypoint (Google allows a max of 8)
-                  $waypoints = [
-                  new DirectionsWayPoint(['location' => $santo_domingo])
-                  ];
+                      // lets use the directions renderer
+                      // $home = new LatLng(['lat' => 39.720991014764536, 'lng' => 2.911801719665541]);
+                      $home = new LatLng(['lat' => 15.265812, 'lng' => -23.757389]);
+                      // $school = new LatLng(['lat' => 39.719456079114956, 'lng' => 2.8979293346405166]);
+                      $school = new LatLng(['lat' => 15.265812, 'lng' => -23.757389]);
+                      $santo_domingo = new LatLng(['lat' => 39.72118906848983, 'lng' => 2.907628202438368]);
+                      // $santo_domingo = new LatLng(['lat' => 15.265812, 'lng' => -23.757389]);
 
-                  $directionsRequest = new DirectionsRequest([
-                  'origin' => $home,
-                  'destination' => $school,
-                  'waypoints' => $waypoints,
-                  'travelMode' => TravelMode::DRIVING
-                  ]);
+                      // setup just one waypoint (Google allows a max of 8)
+                      $waypoints = [
+                      new DirectionsWayPoint(['location' => $santo_domingo])
+                      ];
 
-                  // Lets configure the polyline that renders the direction
-                  $polylineOptions = new PolylineOptions([
-                  'strokeColor' => '#FFAA00',
-                  'draggable' => true
-                  ]);
+                      $directionsRequest = new DirectionsRequest([
+                      'origin' => $home,
+                      'destination' => $school,
+                      'waypoints' => $waypoints,
+                      'travelMode' => TravelMode::DRIVING
+                      ]);
 
-                  // Now the renderer
-                  $directionsRenderer = new DirectionsRenderer([
-                  'map' => $map->getName(),
-                  'polylineOptions' => $polylineOptions
-                  ]);
+                      // Lets configure the polyline that renders the direction
+                      $polylineOptions = new PolylineOptions([
+                      'strokeColor' => '#FFAA00',
+                      'draggable' => true
+                      ]);
 
-                  // Finally the directions service
-                  $directionsService = new DirectionsService([
-                  'directionsRenderer' => $directionsRenderer,
-                  'directionsRequest' => $directionsRequest
-                  ]);
+                      // Now the renderer
+                      $directionsRenderer = new DirectionsRenderer([
+                      'map' => $map->getName(),
+                      'polylineOptions' => $polylineOptions
+                      ]);
 
-                  // Thats it, append the resulting script to the map
-                  $map->appendScript($directionsService->getJs());
+                      // Finally the directions service
+                      $directionsService = new DirectionsService([
+                      'directionsRenderer' => $directionsRenderer,
+                      'directionsRequest' => $directionsRequest
+                      ]);
 
-                  // Lets add a marker now
-                  $marker = new Marker([
-                  'position' => $coord,
-                  'title' => 'My Home Town',
-                  ]);
+                      // Thats it, append the resulting script to the map
+                      $map->appendScript($directionsService->getJs());
 
-                  // Provide a shared InfoWindow to the marker
-                  $marker->attachInfoWindow(
-                  new InfoWindow([
-                      'content' => '<p>This is my super cool content</p>'
-                  ])
-                  );
+                      // Lets add a marker now
+                      $marker = new Marker([
+                      'position' => $coord,
+                      'title' => 'Txira Surf Spot',
+                      ]);
 
-                  // Add marker to the map
-                  $map->addOverlay($marker);
+                      // Provide a shared InfoWindow to the marker
+                      $marker->attachInfoWindow(
+                      new InfoWindow([
+                          'content' => '<p>Pico Txira</p>' //model->DESIG
+                      ])
+                      );
 
-                  // Now lets write a polygon
-                  $coords = [
-                  new LatLng(['lat' => 25.774252, 'lng' => -80.190262]),
-                  new LatLng(['lat' => 18.466465, 'lng' => -66.118292]),
-                  new LatLng(['lat' => 32.321384, 'lng' => -64.75737]),
-                  new LatLng(['lat' => 25.774252, 'lng' => -80.190262])
-                  ];
+                      // Add marker to the map
+                      $map->addOverlay($marker);
 
-                  $polygon = new Polygon([
-                  'paths' => $coords
-                  ]);
+                      // Now lets write a polygon
+                      // $coords = [
+                      // new LatLng(['lat' => 25.774252, 'lng' => -80.190262]),
+                      // new LatLng(['lat' => 18.466465, 'lng' => -66.118292]),
+                      // new LatLng(['lat' => 32.321384, 'lng' => -64.75737]),
+                      // new LatLng(['lat' => 25.774252, 'lng' => -80.190262])
+                      // ];
 
-                  // Add a shared info window
-                  $polygon->attachInfoWindow(new InfoWindow([
-                      'content' => '<p>This is my super cool Polygon</p>'
-                  ]));
+                      $coords = [
+                      new LatLng(['lat' => 15.265812, 'lng' => -23.757389]),
+                      new LatLng(['lat' => 15.265812, 'lng' => -23.757389]),
+                      new LatLng(['lat' => 15.265812, 'lng' => -23.757389]),
+                      new LatLng(['lat' => 15.265812, 'lng' => -23.757389])
+                      ];
 
-                  // Add it now to the map
-                  $map->addOverlay($polygon);
+                      $polygon = new Polygon([
+                      'paths' => $coords
+                      ]);
+
+                      // Add a shared info window
+                      $polygon->attachInfoWindow(new InfoWindow([
+                          'content' => '<p>Txira Surf Spot</p>'
+                      ]));
+
+                      // Add it now to the map
+                      // $map->addOverlay($polygon);
 
 
-                  // Lets show the BicyclingLayer :)
-                  $bikeLayer = new BicyclingLayer(['map' => $map->getName()]);
+                      // Lets show the BicyclingLayer :)
+                      $bikeLayer = new BicyclingLayer(['map' => $map->getName()]);
 
-                  // Append its resulting script
-                  $map->appendScript($bikeLayer->getJs());
+                      // Append its resulting script
+                      $map->appendScript($bikeLayer->getJs());
 
-                  // Display the map -finally :)
-                  echo $map->display();
+                      // Display the map -finally :)
+                      echo $map->display();
 
-                  use dosamigos\google\maps\services\DirectionsClient;
-                  $direction = new DirectionsClient([
-                      'params' => [
-                          'language' => Yii::$app->language,
-                          'origin' => 'street from',
-                          'destination' => 'street to'
-                      ]
-                  ]);
 
-                  $data = $direction->lookup(); //get data from google.maps API
+                      $direction = new DirectionsClient([
+                          'params' => [
+                              'language' => Yii::$app->language,
+                              'origin' => 'street from',
+                              'destination' => 'street to'
+                          ]
+                      ]);
 
-            ?>
+                      $data = $direction->lookup(); //get data from google.maps API
+
+                ?>
+            </div>
+
         </div>
     <!-- </div> -->
 </div>

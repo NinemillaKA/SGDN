@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
           									return ($data->ESTADO!='A')?'<span class="label label-danger">Disabled</span>':'<span class="label label-success">Enabled</span>'; // $data['name'] for array data, e.g. using SqlDataProvider.
           								},
           					 ],
+                     // 'MENU_ID.DESIG',
                     //'DT_REGISTO',
                     //'DT_UPDATE',
                     //'ACTION',

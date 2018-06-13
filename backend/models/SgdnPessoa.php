@@ -220,15 +220,22 @@ class SgdnPessoa extends \yii\db\ActiveRecord
           $this->DT_NASC = date("d-m-Y",strtotime($this->DT_NASC));
       }
 
-      // public function dataNascimento () {
-      //     // Return the number of days between the two dates:
-      //
-      //       //return round((abs(strtotime( $this->DT_NASC)-strtotime(time()))/86400)/365);
-      //       $date1=date($this->DT_NASC);
-      //       $date2=date();
-      //
-      //       $date_diff=strtotime($date2)-strtotime($date1);
-      //       return floor(($date_diff)/(60*60*24*365));
-      //
-      //     }
+      public function dataNascimento () {
+          // Return the number of days between the two dates:
+
+            //return round((abs(strtotime( $this->DT_NASC)-strtotime(time()))/86400)/365);
+            // $date = new Date($this->DT_NASC);
+            $bday = $this->DT_NASC;
+            $now =  date('Y-m-d H:i:s');
+            // $interval = $now->diff($date);
+            $interval = round((strtotime($bday) - strtotime($now))/3600, 1);
+            return $interval;
+
+            // $date1=date($this->DT_NASC);
+            // $now=date();
+            //
+            // $date_diff=strtotime($date2)-strtotime($date1);
+            // return floor(($date_diff)/(60*60*24*365));
+
+          }
 }

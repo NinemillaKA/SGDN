@@ -9,6 +9,19 @@ use backend\models\SgdmInstrutor;
 use kartik\daterange\DateRangePicker;
 use yii\helpers\Url;
 
+use dosamigos\google\maps\LatLng;
+use dosamigos\google\maps\services\DirectionsWayPoint;
+use dosamigos\google\maps\services\TravelMode;
+use dosamigos\google\maps\overlays\PolylineOptions;
+use dosamigos\google\maps\services\DirectionsRenderer;
+use dosamigos\google\maps\services\DirectionsService;
+use dosamigos\google\maps\overlays\InfoWindow;
+use dosamigos\google\maps\overlays\Marker;
+use dosamigos\google\maps\Map;
+use dosamigos\google\maps\services\DirectionsRequest;
+use dosamigos\google\maps\overlays\Polygon;
+use dosamigos\google\maps\layers\BicyclingLayer;
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnRelInscricaoViagen */
 /* @var $form yii\widgets\ActiveForm */
@@ -37,9 +50,9 @@ use yii\helpers\Url;
     </div>
 
     <div class="col-md-4">
-        <?= $form->field($model, 'INSTRUTOR_ID')->dropDownList(ArrayHelper::map(SgdmInstrutor::find()->where('ESTADO = "A"')->all(),'ID','pESSOA.NOME'),
-        ['prompt'=>'*** Selecione Intrutor ***',
-        'Onchange'=>'getInstrutor(this.value);','id'=>'selectInstrutor', 'class'=>'form-control']) ?>
+        <?= $form->field($model, 'INSTRUTOR_ID')->dropDownList(ArrayHelper::map(SgdnPessoa::find()->where('ESTADO = "A"')->all(),'ID','NOME'),
+        ['prompt'=>'*** Seleciona Pessoa ***',
+        'Onchange'=>'getPessoa(this.value);','id'=>'selectPessoa', 'class'=>'form-control']) ?>
 
         <div id="result_instrutor"></div>
     </div>

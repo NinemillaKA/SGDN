@@ -3,22 +3,29 @@
 namespace backend\models;
 
 use Yii;
-
+use kartik\password\StrengthValidator;
+use \Faker\Provider\Uuid;
+use yii\web\IdentityInterface;
 /**
  * This is the model class for table "user".
  *
  * @property int $id
+ * @property string $name
  * @property string $username
- * @property string $auth_key
  * @property string $password_hash
- * @property string $password_reset_token
  * @property string $email
+ * @property string $sgdn_rel_perfil_ID
+ * @property string $url_perfil
+ * @property string $dt_registo
+ * @property string $dt_updated
+ * @property string $estado
  * @property int $status
- * @property int $created_at
- * @property int $updated_at
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
+
+    public $file;
+    public $auth_key; 
     /**
      * @inheritdoc
      */
@@ -30,16 +37,22 @@ class User extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
     public function rules()
     {
         return [
-            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required'],
-            [['status', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
-            [['auth_key'], 'string', 'max' => 32],
+            [['username', 'password_hash', 'email', 'sgdn_rel_perfil_ID'], 'required'],
+            [['password_hash'], StrengthValidator::className(), 'preset'=>'normal', 'userAttribute'=>'username'],
+            [['dt_registo', 'dt_updated'], 'safe'],
+            [['status'], 'integer'],
+            [['name'], 'string', 'max' => 300],
+            [['username', 'password_hash', 'email'], 'string', 'max' => 255],
+            [['sgdn_rel_perfil_ID'], 'string', 'max' => 36],
+            [['url_perfil'], 'string', 'max' => 128],
+            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'checkExtensionByMimeType'=>false, 'maxFiles' => 1],
+            [['estado'], 'string', 'max' => 1],
             [['username'], 'unique'],
             [['email'], 'unique'],
-            [['password_reset_token'], 'unique'],
         ];
     }
 
@@ -50,14 +63,168 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'name' => 'Name',
             'username' => 'Username',
-            'auth_key' => 'Auth Key',
             'password_hash' => 'Password Hash',
-            'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
+            'sgdn_rel_perfil_ID' => 'Sgdn Rel Perfil  ID',
+            'url_perfil' => 'Url Perfil',
+            'dt_registo' => 'Dt Registo',
+            'dt_updated' => 'Dt Updated',
+            'estado' => 'Estado',
             'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+          $this->id = Uuid::uuid();
+          $this->dt_registo = date('Y-m-d h:m:s');
+          $this->estado = 'A';
+
+          //for now, but need be updated!!!
+          $this->dt_updated = null;
+          $this->status = null;
+          $this->name = null;
+
+            return true;
+         }
+
+        return parent::beforeSave($insert);
+    }
+
+
+    //----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne(['id' => $id]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+        return static::findOne(['username' => $username]);
+    }
+
+    /**
+     * Finds user by password reset token
+     *
+     * @param string $token password reset token
+     * @return static|null
+     */
+    public static function findByPasswordResetToken($token)
+    {
+        if (!static::isPasswordResetTokenValid($token)) {
+            return null;
+        }
+
+        return static::findOne([
+            'password_reset_token' => $token,
+            'status' => self::STATUS_ACTIVE,
+        ]);
+    }
+
+    /**
+     * Finds out if password reset token is valid
+     *
+     * @param string $token password reset token
+     * @return bool
+     */
+    public static function isPasswordResetTokenValid($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
+
+        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
+        return $timestamp + $expire >= time();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    /**
+     * Generates password hash from password and sets it to the model
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    /**
+     * Generates "remember me" authentication key
+     */
+    public function generateAuthKey()
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    /**
+     * Generates new password reset token
+     */
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Removes password reset token
+     */
+    public function removePasswordResetToken()
+    {
+        $this->password_reset_token = null;
     }
 }

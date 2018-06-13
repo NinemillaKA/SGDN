@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use \Faker\Provider\Uuid;
 
 /**
  * This is the model class for table "sgdn_rel_avaliacao".
@@ -33,7 +34,7 @@ class SgdnRelAvaliacao extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ID', 'MATRICULA_ID', 'AVALIACAO_TP', 'DT_REGISTO', 'ESTADO'], 'required'],
+            [['MATRICULA_ID', 'AVALIACAO_TP'], 'required'],
             [['DT_REGISTO'], 'safe'],
             [['ID', 'MATRICULA_ID', 'AVALIACAO_TP'], 'string', 'max' => 36],
             [['OBS'], 'string', 'max' => 2000],
@@ -74,4 +75,18 @@ class SgdnRelAvaliacao extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SgdnRelMatricula::className(), ['ID' => 'MATRICULA_ID']);
     }
+
+    public function beforeSave($insert)
+    {
+          if ($insert) {
+            $this->ID = Uuid::uuid();
+            $this->DT_REGISTO = date('Y-m-d h:m:s');
+            $this->ESTADO = 'A';
+
+              return true;
+           }
+
+          return parent::beforeSave($insert);
+      }
+
 }

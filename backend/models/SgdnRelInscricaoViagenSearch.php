@@ -65,7 +65,7 @@ class SgdnRelInscricaoViagenSearch extends SgdnRelInscricaoViagen
         $query->andFilterWhere(['like', 'ID', $this->ID])
             ->andFilterWhere(['like', 'VIAGEM_ID', $this->VIAGEM_ID])
             ->andFilterWhere(['like', 'PESSOA_ID', $this->PESSOA_ID])
-            // ->andFilterWhere(['like', 'INSTRUTOR_ID', $this->PESSOA_ID])
+            ->andFilterWhere(['like', 'INSTRUTOR_ID', $this->INSTRUTOR_ID])
             ->andFilterWhere(['like', 'ESTADO', $this->ESTADO]);
 
         return $dataProvider;
