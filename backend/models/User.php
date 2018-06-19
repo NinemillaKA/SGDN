@@ -25,7 +25,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
 
     public $file;
-    public $auth_key; 
+    public $auth_key;
     /**
      * @inheritdoc
      */

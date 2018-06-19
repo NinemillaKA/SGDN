@@ -15,6 +15,8 @@ use \Faker\Provider\Uuid;
  * @property string $DESCR
  * @property string $GEOGRAFIA_ID
  * @property string $ENDERECO
+ * @property string $CORD_ORIGIN
+ * @property string $CORD_DESTINY
  * @property string $DT_INICIO
  * @property string $DT_FIM
  * @property double $PRECO
@@ -22,8 +24,17 @@ use \Faker\Provider\Uuid;
  * @property string $ESTADO
  *
  * @property SgdnRelInscricaoViagen[] $sgdnRelInscricaoViagens
+ * @property SgdnRelViagenInstrutor[] $sgdnRelViagenInstrutors
  * @property GlbGeografia $gEOGRAFIA
  */
+
+ // class SearchLocation extends \yii\base\Model
+ // {
+ //     public $address;
+ //     public $longitude;
+ //     public $latitude;
+ // }
+
 class SgdnViagen extends \yii\db\ActiveRecord
 {
     /**
@@ -38,6 +49,15 @@ class SgdnViagen extends \yii\db\ActiveRecord
      * @inheritdoc
      */
     public $file;
+
+    public $address;
+    public $longitude;
+    public $latitude;
+
+    public $address2;
+    public $longitude2;
+    public $latitude2;
+
     public function rules()
     {
         return [
@@ -48,7 +68,7 @@ class SgdnViagen extends \yii\db\ActiveRecord
             [['CODIGO'], 'string', 'max' => 5],
             [['URL_IMAGEM'], 'string', 'max' => 128],
             [['DESIG', 'ENDERECO'], 'string', 'max' => 300],
-            [['DESCR'], 'string', 'max' => 2000],
+            [['DESCR', 'CORD_ORIGIN', 'CORD_DESTINY'], 'string', 'max' => 2000],
             [['GEOGRAFIA_ID'], 'string', 'max' => 50],
             [['ESTADO'], 'string', 'max' => 1],
             [['ID'], 'unique'],
@@ -70,6 +90,8 @@ class SgdnViagen extends \yii\db\ActiveRecord
             'DESCR' => 'Descr',
             'GEOGRAFIA_ID' => 'Geografia  ID',
             'ENDERECO' => 'Endereco',
+            'CORD_ORIGIN' => 'Cord Origin',
+            'CORD_DESTINY' => 'Cord Destiny',
             'DT_INICIO' => 'Dt  Inicio',
             'DT_FIM' => 'Dt  Fim',
             'PRECO' => 'Preco',
@@ -86,9 +108,17 @@ class SgdnViagen extends \yii\db\ActiveRecord
         return $this->hasMany(SgdnRelInscricaoViagen::className(), ['VIAGEM_ID' => 'ID']);
     }
 
-    /**
+   /**
      * @return \yii\db\ActiveQuery
      */
+     public function getSgdnRelViagenInstrutors()
+     {
+       return $this->hasMany(SgdnRelViagenInstrutor::className(), ['VIAGEM_ID' => 'ID']);
+     }
+
+   /**
+    * @return \yii\db\ActiveQuery
+    */
     public function getGEOGRAFIA()
     {
         return $this->hasOne(GlbGeografia::className(), ['ID' => 'GEOGRAFIA_ID']);
@@ -97,6 +127,7 @@ class SgdnViagen extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
             if ($insert) {
+
               $this->ID = Uuid::uuid();
               $this->DT_REGISTO = date('Y-m-d h:m:s');
               $this->ESTADO = 'A';

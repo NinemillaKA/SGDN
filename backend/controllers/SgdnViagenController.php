@@ -39,7 +39,7 @@ class SgdnViagenController extends Controller
     {
         $model = $this->findModel($id);
 
-        echo $this->renderAjax('view_detalhes_viagen', [
+        echo $this->render('view_detalhes_viagen', [
             'model' => $model,
             'show_buttonOrLabel'=>false,
         ],true);
@@ -64,7 +64,7 @@ class SgdnViagenController extends Controller
      */
     public function actionView($id)
     {
-        return $this->renderAjax('view', [
+        return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -87,15 +87,31 @@ class SgdnViagenController extends Controller
         $registro = $resultado + 1;
         $model->CODIGO = str_pad($registro, 4 , '0', STR_PAD_LEFT); //
 
-        if ($model->load(Yii::$app->request->post())) {
+
+        // var_dump($model);
+        // Yii::$app->end();
+        //
+        if ($model->load(Yii::$app->request->post())){
             $file = UploadedFile::getInstance($model, 'file');
               if($file){
-                 $generateRandomName = Yii::$app->security->generateRandomString(). '.' .$file->extension;
+                  $generateRandomName = Yii::$app->security->generateRandomString(). '.' .$file->extension;
                   $model->URL_IMAGEM = 'img/viagens/'.$generateRandomName;
                   $file->saveAs('img/viagens/'.$generateRandomName);
               }
+              // $model = Yii::$app->request->post();
+              $address = $_POST['SgdnViagen']['address'];
+              $latitude = $_POST['SgdnViagen']['latitude'];
+              $longitude = $_POST['SgdnViagen']['longitude'];
 
-              if ($model->save())
+              $address2 = $_POST['SgdnViagen']['address2'];
+              $latitude2 = $_POST['SgdnViagen']['latitude2'];
+              $longitude2 = $_POST['SgdnViagen']['longitude2'];
+
+              $model->CORD_ORIGIN = $address.'_'.$latitude.'_'.$longitude;
+              $model->CORD_DESTINY = $address2.'_'.$latitude2.'_'.$longitude2;
+              // var_dump($model->CORD_ORIGIN.'_'.$model->CORD_DESTINY);
+              // Yii::$app->end();
+              if($model->save())
               {
                   return $this->redirect(['index']);
               }else{
@@ -104,7 +120,7 @@ class SgdnViagenController extends Controller
 
         }
 
-        return $this->renderAjax('create', [
+        return $this->render('create', [
             'model' => $model,
         ]);
     }
@@ -137,7 +153,7 @@ class SgdnViagenController extends Controller
                   print_r($model->errors);
         }
 
-        return $this->renderAjax('update', [
+        return $this->render('update', [
             'model' => $model,
         ]);
 

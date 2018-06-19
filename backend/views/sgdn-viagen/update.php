@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\bootstrap\Modal;
+// use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnViagen */
 
@@ -11,14 +11,14 @@ $this->params['breadcrumbs'][] = ['label' => $model->ID, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 
-<?php
+<!-- <-?php
   Modal::begin([
     'id' => 'update-modal',
     'size' => 'modal-lg',
-    'header' => '<strong>Actualizar Viagen</strong>', 
+    'header' => '<strong>Actualizar Viagen</strong>',
     'footer' => Html::button('<i class="fa fa-save"></i> Confirmar', ['onclick' => '$("#sgdn-viagen-form").submit();', 'class' => 'pull-right btn btn-flat btn-primary']),
   ]);
-?>
+?> -->
 
 <div class="sgdn-viagen-update">
 
@@ -30,6 +30,6 @@ $this->params['breadcrumbs'][] = 'Update';
 
 </div>
 
-<?php
+<!-- <-?php
   Modal::end();
-?>
+?> -->

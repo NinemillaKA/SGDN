@@ -14,7 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <div class="box box-widget">
       <div class="box-header with-border">
-          <?= Html::button('Registar', ['onclick' => 'create("sgdn-viagen/create")', 'class' => 'pull-right btn btn-flat btn-primary']) ?>
+          <!-- <-?= Html::button('Registar', ['onclick' => 'create("sgdn-viagen/create")', 'class' => 'pull-right btn btn-flat btn-primary']) ?> -->
+          <?= Html::a('Registar', ['create'], ['class' => 'btn btn-flat btn-primary pull-right']) ?>
       </div>
       <div class="box-body">
           <?= GridView::widget([
@@ -31,7 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                   'columns' => [
                       ['class' => 'yii\grid\SerialColumn'],
 
-
                   // 'ID',
                   'CODIGO',
                   // 'URL_IMAGEM:url',
@@ -43,36 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
                   'DT_FIM',
                   'PRECO',
                   //'DT_REGISTO',
-                  [
-                    'attribute'=>'ESTADO',
-                    'value'=>function($model){return ($model->ESTADO == 'A')?'Activo':'Inactivo';}
-                  ],
-                  [
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{view}{update}{delete}',
-                    'buttons' => [
-                          'view' => function($url, $model, $key) {
-                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', '#', [
-                                  'onclick' => 'view("' .$url. '")',
-                                ]);
-                            },
-                          'update' => function($url, $model, $key) {
-                                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', [
-                                  'onclick' => 'update("' .$url. '")',
-                                ]);
-                          },
-                          'delete' => function($url, $model){
-                              return Html::a(($model['ESTADO'] == 'A') ? '<span class="glyphicon glyphicon-trash"></span>':'<span class="glyphicon glyphicon-refresh"></span>', ['delete', 'id' => $model['ID']],
-                              [ 'class' => '',
-                                   'data' => [ 'confirm' => 'Are you absolutely sure ? You will lose all the information about this user with this action.', 'method' => 'post', ],
-                                   ]);
-                            },
-                     ],
-
-                  ],
+                  ['class' => 'yii\grid\ActionColumn'],
                  ],
                 ]); ?>
        </div>
   </div>
 </div>
-<div id="hidden-content"></div>
+<!-- <div id="hidden-content"></div> -->

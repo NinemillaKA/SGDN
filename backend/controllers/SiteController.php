@@ -6,6 +6,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use backend\models\SgdnRelPerfil;
 
 /**
  * Site controller
@@ -60,7 +61,19 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+      $user_type = SgdnRelPerfil::find()->select(['DESIG'])->where('ID=:id', [ ':id' => Yii::$app->user->identity->sgdn_rel_perfil_ID ])->One();
+      // var_dump($user_type);
+      // Yii::$app->end();
+      if ($user_type['DESIG'] == 'Administrador') {
+        // code...
+        return $this->render('index_dash_admin');
+      }elseif ($user_type['DESIG'] == 'Gestor Escola') {
+        // code...
+        return $this->render('index_dash_gestor');
+      }else {
         return $this->render('index');
+      }
+
     }
 
     /**

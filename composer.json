@@ -26,7 +26,8 @@
         "kartik-v/yii2-widget-activeform": "@dev",
         "kartik-v/yii2-date-range": "*",
         "execut/yii2-widget-bootstraptreeview": "dev-master",
-        "kartik-v/yii2-password": "@dev"
+        "kartik-v/yii2-password": "@dev",
+        "kalyabin/yii2-select-google-map-location": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
