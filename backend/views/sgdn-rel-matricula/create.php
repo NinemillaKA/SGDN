@@ -10,7 +10,7 @@ $this->title = 'Create Sgdn Rel Matricula';
 $this->params['breadcrumbs'][] = ['label' => 'Sgdn Rel Matriculas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-sgdn-rel-matricula-form
+<!-- sgdn-rel-matricula-form -->
 <?php
   Modal::begin([
     'id' => 'create-modal',

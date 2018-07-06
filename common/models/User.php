@@ -2,66 +2,106 @@
 namespace common\models;
 
 use Yii;
-use yii\base\NotSupportedException;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
+use kartik\password\StrengthValidator;
+use \Faker\Provider\Uuid;
 use yii\web\IdentityInterface;
-
 /**
- * User model
+ * This is the model class for table "user".
  *
- * @property integer $id
+ * @property int $id
+ * @property string $name
  * @property string $username
  * @property string $password_hash
- * @property string $password_reset_token
  * @property string $email
- * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
+ * @property string $sgdn_rel_perfil_ID
+ * @property string $url_perfil
+ * @property string $dt_registo
+ * @property string $dt_updated
+ * @property string $estado
+ * @property int $status
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 10;
 
-
+    public $file;
+    public $auth_key;
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%user}}';
+        return 'user';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [['username', 'password_hash', 'email', 'sgdn_rel_perfil_ID'], 'required'],
+            [['password_hash'], StrengthValidator::className(), 'preset'=>'normal', 'userAttribute'=>'username'],
+            [['dt_registo', 'dt_updated'], 'safe'],
+            [['status'], 'integer'],
+            [['name'], 'string', 'max' => 300],
+            [['username', 'password_hash', 'email'], 'string', 'max' => 255],
+            [['sgdn_rel_perfil_ID'], 'string', 'max' => 36],
+            [['url_perfil'], 'string', 'max' => 128],
+            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'checkExtensionByMimeType'=>false, 'maxFiles' => 1],
+            [['estado'], 'string', 'max' => 1],
+            [['username'], 'unique'],
+            [['email'], 'unique'],
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'name' => 'Name',
+            'username' => 'Username',
+            'password_hash' => 'Password Hash',
+            'email' => 'Email',
+            'sgdn_rel_perfil_ID' => 'Sgdn Rel Perfil  ID',
+            'url_perfil' => 'Url Perfil',
+            'dt_registo' => 'Dt Registo',
+            'dt_updated' => 'Dt Updated',
+            'estado' => 'Estado',
+            'status' => 'Status',
+        ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+          $this->id = Uuid::uuid();
+          $this->dt_registo = date('Y-m-d h:m:s');
+          $this->estado = 'A';
+
+          //for now, but need be updated!!!
+          $this->dt_updated = null;
+          $this->status = null;
+          $this->name = null;
+
+            return true;
+         }
+
+        return parent::beforeSave($insert);
+    }
+
+
+    //----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritdoc}
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['id' => $id]);
     }
 
     /**
@@ -80,7 +120,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username]);
     }
 
     /**

@@ -6,6 +6,7 @@ use kartik\form\ActiveForm;
 use yii\helpers\ArrayHelper;
 use backend\models\SgdnPessoa;
 use backend\models\SgdnRelAula;
+use backend\models\SgdnPrMetodoPagamento;
 use yii\helpers\Url;
 // use dosamigos\datepicker\DatePicker;
 // use wbraganca\dynamicform\DynamicFormWidget;
@@ -30,50 +31,30 @@ use yii\helpers\Url;
                       'Onchange'=>'getPessoa(this.value);','id'=>'selectPessoa', 'class'=>'form-control'])?>
                   </div>
                   <div class="col-md-6">
-                    <?= $form->field($model, 'AULA_ID')->textInput(['maxlength' => true])->dropDownList(ArrayHelper::map(SgdnRelAula::find()->where('ESTADO = "A"')->all(),'ID','DESIG'), ['prompt'=>'*** SELECIONA AULA ***', 'Onchange'=>'getPreco(this.value);','id'=>'selectPreco', 'class'=>'form-control']) ?>
+                    <?= $form->field($model, 'AULA_ID')->textInput(['maxlength' => true])->dropDownList(ArrayHelper::map(SgdnRelAula::find()->where('ESTADO = "A"')->all(),'ID','DESIG'),
+                     ['prompt'=>'*** SELECIONA AULA ***', 'Onchange'=>'getPreco(this.value);','id'=>'selectPreco', 'class'=>'form-control']) ?>
                   </div>
                   <div class="col-md-6">
                       <?= $form->field($model, 'OBS')->textInput(['maxlength' => true]) ?>
                   </div>
-                  <!-- <div class="col-md-6">
-                    <-?php $addon = '<span class="input-group-addon">
-                            <i class="glyphicon glyphicon-calendar"></i>
-                        </span>';
-                        ?>
-                        <label> Data </label>
-                        <div class="input-group drp-container">
-                            <-?= DateRangePicker::widget([
-                                'model'=>$model,
-                                'attribute' => 'DATA',
-                                'value'=>'2015-10-19 12:00 AM',
-                                'useWithAddon'=>true,
-                                'convertFormat'=>true,
-                                'pluginOptions'=>[
-                                    // 'timePicker'=>true,
-                                    'timePickerIncrement'=>15,
-                                    'timePicker24Hour' => true,
-                                    'locale'=>['format' => 'Y-m-d H:i'],
-                                    'singleDatePicker'=>true,
-                                    'showDropdowns'=>true
-                                ]
-                            ])?>
-                         </div>
-                      </div> -->
-                      <!-- <-?php foreach ($modelsAula as $key => $modelAula): ?>
-                          <-?php print_r($modelAula->PRECO) ?> -->
-                          <div class="col-md-6" id="preco">
-                              <?=$form->field($model, 'PRECO', [
-                                  'addon' => [
-                                      'prepend' => [ 'content' => '$', 'options'=>['class'=>'alert-success'],],
-                                      'append' => ['content' => '.00', 'options'=>['style' => 'font-family: Monaco, Consolas, monospace;']],
-                                  ],
-                              ]);?>
-                          </div>
-                          <?php if (!$model->isNewRecord): ?>
-                              <div class="col-md-12">
-                                  <?= $form->field($model, 'ESTADO')->textInput(['maxlength' => true])->dropDownList(["A"=>"ACTIVO", "I"=>"INACTIVO"],['prompt' =>'*** ESTADO ***', 'class'=>'form-control']); ?>
-                              </div>
-                          <?php endif; ?>
+
+                  <div class="col-md-6" id="preco">
+                      <?=$form->field($model, 'PRECO', [
+                          'addon' => [
+                              'prepend' => [ 'content' => '$', 'options'=>['class'=>'alert-success'],],
+                              'append' => ['content' => '.00', 'options'=>['style' => 'font-family: Monaco, Consolas, monospace;']],
+                          ],
+                      ]);?>
+                  </div>
+                  <div class="col-md-6">
+                      <?= $form->field($model, 'METD_PGMENT_ID')->dropDownList(ArrayHelper::map(SgdnPrMetodoPagamento::find()->where('ESTADO = "A"')->all(),'ID','DESIG'),
+                       ['prompt'=>'*** Payment Mode  ***', 'Onchange'=>'getPreco(this.value);','id'=>'selectPreco', 'class'=>'form-control']) ?>
+                  </div>
+                  <?php if (!$model->isNewRecord): ?>
+                      <div class="col-md-12">
+                          <?= $form->field($model, 'ESTADO')->textInput(['maxlength' => true])->dropDownList(["A"=>"ACTIVO", "I"=>"INACTIVO"],['prompt' =>'*** ESTADO ***', 'class'=>'form-control']); ?>
+                      </div>
+                  <?php endif; ?>
 
                       <!-- <-?php endforeach; ?> -->
               </div>

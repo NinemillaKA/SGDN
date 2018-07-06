@@ -11,6 +11,7 @@ use \Faker\Provider\Uuid;
  * @property string $ID
  * @property string $ALUNO_ID
  * @property string $AULA_ID
+ * @property string $METD_PGMENT_ID
  * @property string $CODIGO
  * @property string $DATA
  * @property string $OBS
@@ -39,7 +40,7 @@ class SgdnRelMatricula extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ALUNO_ID', 'AULA_ID', 'CODIGO',], 'required'],
+            [['ALUNO_ID', 'AULA_ID','METD_PGMENT_ID', 'CODIGO',], 'required'],
             [['DATA', 'DT_REGISTO'], 'safe'],
             [['PRECO'], 'number'],
             [['ID', 'ALUNO_ID', 'AULA_ID'], 'string', 'max' => 36],
@@ -48,6 +49,7 @@ class SgdnRelMatricula extends \yii\db\ActiveRecord
             [['ESTADO'], 'string', 'max' => 1],
             [['ID'], 'unique'],
             [['ALUNO_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnPessoa::className(), 'targetAttribute' => ['ALUNO_ID' => 'ID']],
+            [['METD_PGMENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnPrMetodoPagamento::className(), 'targetAttribute' => ['METD_PGMENT_ID' => 'ID']],
             [['AULA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnRelAula::className(), 'targetAttribute' => ['AULA_ID' => 'ID']],
         ];
     }
@@ -61,6 +63,7 @@ class SgdnRelMatricula extends \yii\db\ActiveRecord
             'ID' => 'ID',
             'ALUNO_ID' => 'Aluno  ID',
             'AULA_ID' => 'Aula  ID',
+            'METD_PGMENT_ID' => 'Metd Pgment ID',
             'CODIGO' => 'Codigo',
             'DATA' => 'Data',
             'OBS' => 'Obs',
@@ -92,6 +95,15 @@ class SgdnRelMatricula extends \yii\db\ActiveRecord
     public function getALUNO()
     {
         return $this->hasOne(SgdnPessoa::className(), ['ID' => 'ALUNO_ID']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+
+    public function getMETDPGMENT()
+    { 
+        return $this->hasOne(SgdnPrMetodoPagamento::className(), ['ID' => 'METD_PGMENT_ID']);
     }
 
     /**

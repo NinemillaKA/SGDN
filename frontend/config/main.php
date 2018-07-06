@@ -13,6 +13,34 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+        /*'view' => [
+          'theme' => [
+            'pathMap' => [
+              '@app/views' => '@vendor/p2made/yii2-flat-theme/example-views/flat'
+            ],
+          ],
+        ],*/
+
+        // 'assetManager' => [
+    		// 	'bundles' => [
+    		// 		'yii\web\JqueryAsset' => [
+    		// 			'sourcePath' => null, 'js' => [],
+    		// 		],
+    		// 		'yii\bootstrap\BootstrapAsset' => [
+    		// 			'sourcePath' => null, 'css' => [],
+    		// 		],
+    		// 		'yii\bootstrap\BootstrapPluginAsset' => [
+    		// 			'sourcePath' => null, 'js' => [],
+    		// 		],
+    		// 		'yii\jui\JuiAsset' => [
+    		// 			'sourcePath' => null, 'css' => [], 'js' => [],
+    		// 		],
+    		// 		'\rmrevin\yii\fontawesome\AssetBundle' => [
+    		// 			'sourcePath' => null, 'css' => [],
+    		// 		],
+    		// 	],
+    		// ],
+
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],

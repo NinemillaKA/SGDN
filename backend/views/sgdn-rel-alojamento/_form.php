@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use backend\models\SgdnPessoa;
 use backend\models\SgdnResidencia;
+use backend\models\SgdnPrMetodoPagamento;
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnRelAlojamento */
 /* @var $form yii\widgets\ActiveForm */
@@ -33,83 +34,81 @@ use backend\models\SgdnResidencia;
        </div>
    </div>
 
-    <?= $form->field($model, 'OBS')->textInput(['maxlength' => true]) ?>
+   <div class="row">
 
-    <!-- <-?= $form->field($model, 'DT_ENTRADA')->textInput() ?>
+       <div class="col-md-4">
 
-    <-?= $form->field($model, 'DT_SAIDA')->textInput() ?> -->
+           <?php $addon = '<span class="input-group-addon">
+                   <i class="glyphicon glyphicon-calendar"></i>
+               </span>';
+               ?>
+               <label> Data Inico </label>
+               <div class="input-group drp-container">
+                   <?= DateRangePicker::widget([
+                       'model'=>$model,
+                       'attribute' => 'DT_ENTRADA',
+                       'value'=>'2015-10-19 12:00 AM',
+                       'useWithAddon'=>true,
+                       'convertFormat'=>true,
+                       'pluginOptions'=>[
+                           'timePicker'=>true,
+                           'timePickerIncrement'=>15,
+                           'timePicker24Hour' => true,
+                           'locale'=>['format' => 'Y-m-d H:i'],
+                           'singleDatePicker'=>true,
+                           'showDropdowns'=>true
+                       ]
 
-    <div class="row">
+                   ]).$addon ?>
+                </div>
+           </div>
+
+           <div class="col-md-4">
+             <?php $addon = '<span class="input-group-addon">
+                     <i class="glyphicon glyphicon-calendar"></i>
+                 </span>';
+                 ?>
+             <label> Data Fim </label>
+             <div class="input-group drp-container">
+                 <?= DateRangePicker::widget([
+                     'model'=>$model,
+                     'attribute' => 'DT_SAIDA',
+                     'value'=>'2015-10-19 12:00 AM',
+                     'useWithAddon'=>true,
+                     'convertFormat'=>true,
+                     'pluginOptions'=>[
+                         'timePicker'=>true,
+                         'timePickerIncrement'=>15,
+                         'timePicker24Hour' => true,
+                         'locale'=>['format' => 'Y-m-d H:i'],
+                         'singleDatePicker'=>true,
+                         'showDropdowns'=>true
+                     ]
+                 ]).$addon ?>
+              </div>
+           </div>
+           <div class="col-md-4">
+               <?=$form->field($model, 'TOTAL', [
+                   'addon' => [
+                       'prepend' => [ 'content' => '$', 'options'=>['class'=>'alert-success'],],
+                       'append' => ['content' => '.00', 'options'=>['style' => 'font-family: Monaco, Consolas, monospace;']],
+                   ],
+               ]);?>
+           </div>
+           <br><br><br><br><br><br><br><br><br><br> 
+   </div>
+
+   <div class="row">
+        <div class="col-md-8">
+           <?= $form->field($model, 'OBS')->textInput(['maxlength' => true]) ?>
+        </div>
 
         <div class="col-md-4">
+          <?= $form->field($model, 'METD_PGMENT_ID')->dropDownList(ArrayHelper::map(SgdnPrMetodoPagamento::find()->where('ESTADO = "A"')->all(),'ID','DESIG'),
+           ['prompt'=>'*** Payment Mode  ***', 'Onchange'=>'getPreco(this.value);','id'=>'selectPreco', 'class'=>'form-control']) ?>
+        </div>
 
-            <?php $addon = '<span class="input-group-addon">
-                    <i class="glyphicon glyphicon-calendar"></i>
-                </span>';
-                ?>
-                <label> Data Inico </label>
-                <div class="input-group drp-container">
-                    <?= DateRangePicker::widget([
-                        'model'=>$model,
-                        'attribute' => 'DT_ENTRADA',
-                        'value'=>'2015-10-19 12:00 AM',
-                        'useWithAddon'=>true,
-                        'convertFormat'=>true,
-                        'pluginOptions'=>[
-                            'timePicker'=>true,
-                            'timePickerIncrement'=>15,
-                            'timePicker24Hour' => true,
-                            'locale'=>['format' => 'Y-m-d H:i'],
-                            'singleDatePicker'=>true,
-                            'showDropdowns'=>true
-                        ]
-
-                    ]).$addon ?>
-                 </div>
-            </div>
-
-            <div class="col-md-4">
-              <?php $addon = '<span class="input-group-addon">
-                      <i class="glyphicon glyphicon-calendar"></i>
-                  </span>';
-                  ?>
-              <label> Data Fim </label>
-              <div class="input-group drp-container">
-                  <?= DateRangePicker::widget([
-                      'model'=>$model,
-                      'attribute' => 'DT_SAIDA',
-                      'value'=>'2015-10-19 12:00 AM',
-                      'useWithAddon'=>true,
-                      'convertFormat'=>true,
-                      'pluginOptions'=>[
-                          'timePicker'=>true,
-                          'timePickerIncrement'=>15,
-                          'timePicker24Hour' => true,
-                          'locale'=>['format' => 'Y-m-d H:i'],
-                          'singleDatePicker'=>true,
-                          'showDropdowns'=>true
-                      ]
-                  ]).$addon ?>
-               </div>
-            </div>
-            <div class="col-md-3">
-                <?=$form->field($model, 'TOTAL', [
-                    'addon' => [
-                        'prepend' => [ 'content' => '$', 'options'=>['class'=>'alert-success'],],
-                        'append' => ['content' => '.00', 'options'=>['style' => 'font-family: Monaco, Consolas, monospace;']],
-                    ],
-                ]);?>
-            </div>
-
-            <br><br><br><br><br><br><br><br><br><br>
-
-    </div>
-
-
-
-    <!-- <div class="form-group">
-        <-?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div> -->
+   </div>
 
     <?php ActiveForm::end(); ?>
 
@@ -163,7 +162,7 @@ use backend\models\SgdnResidencia;
         var dtini = $("#sgdnrelalojamento-dt_entrada").val();
         var dtfim = $("#sgdnrelalojamento-dt_saida").val();
         var res_id =  $("#selectResidencia option:selected").val();
-        
+
         if(dtini != "" && dtfim != "" && res_id != "")
         {
           $.get( '<?=Url::to(['sgdn-rel-alojamento/get-price-calculator'])?>',{id:res_id,dtini:dtini,dtfim:dtfim}, function( data ) {

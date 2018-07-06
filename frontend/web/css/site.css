@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    /* background-color: #f5f2f2 !important; */
 }
 
 .wrap {
@@ -117,4 +118,12 @@ a.desc:after {
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+/********       News!!!         *****************/
+
+
+.navbar-inverse {
+    background-color: #3c8dbc !important;
+    border-color: #3c8dbc !important;
 }

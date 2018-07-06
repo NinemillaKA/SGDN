@@ -12,6 +12,12 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use common\models\SgdnRelUserPessoa;
+use common\models\SgdnRelAlojamento;
+use common\models\SgdnRelMatricula;
+use common\models\SgdnRelAluguer;
+use common\models\SgdnRelInscricaoViagen;
+use common\models\SgdnRelAula;
 
 /**
  * Site controller
@@ -54,6 +60,8 @@ class SiteController extends Controller
      */
     public function actions()
     {
+
+
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -62,7 +70,129 @@ class SiteController extends Controller
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+
         ];
+    }
+
+
+    /**
+     * Displays homepage.
+     *
+     * @return mixed
+     */
+    public function actionServices()
+    {
+        return $this->render('services');
+    }
+
+    public function actionTeam()
+    {
+        return $this->render('team');
+    }
+
+    public function actionGallery()
+    {
+        return $this->render('gallery');
+    }
+
+    public function actionDashuser()
+    {
+        $this->layout = "main_services";
+
+        //ultimos 3 residenciais para alojamento
+        $residencias = (new \yii\db\Query())
+              ->select('*')
+              ->from('sgdn_residencia')
+              ->orderBy([
+                  'DT_REGISTO' => SORT_ASC
+              ])
+              ->limit(3)
+              ->all();
+
+        //ultimos 3 materiais para emprestimo
+        $materiais = (new \yii\db\Query())
+              ->select('*')
+              ->from('sgdn_material')
+              ->orderBy([
+                  'DT_REGISTO' => SORT_ASC
+              ])
+              ->limit(3)
+              ->all();
+
+        //ultimos 3 aulas para inscricoes
+        // $aulas = (new \yii\db\Query())
+        //       ->select('*')
+        //       ->from('sgdn_rel_aula')
+        //       ->orderBy([
+        //           'DT_REGISTO' => SORT_ASC
+        //       ])
+        //       ->limit(3)
+        //       ->all();
+
+        $aulas = SgdnRelAula::find()
+                ->orderBy([
+                'DT_REGISTO' => SORT_DESC
+                ])
+                ->limit(3)
+                ->all();
+
+        //ultimos 3 trips para para inscricoes
+        $trips = (new \yii\db\Query())
+              ->select('*')
+              ->from('sgdn_viagen')
+              ->orderBy([
+                  'DT_REGISTO' => SORT_ASC
+              ])
+              ->limit(3)
+              ->all();
+
+        // Dashboard scripts
+        $user_id = Yii::$app->user->identity->id;
+        $id_user_pessoa = SgdnRelUserPessoa::find()->where(['PESSOA_ID' => $user_id])->all();
+
+        $modelAlojamento = SgdnRelAlojamento::find()
+                          ->where(['PESSOA_ID' => $id_user_pessoa])
+                          ->orderBy([
+                          'DT_REGISTO' => SORT_ASC
+                          ])
+                          ->limit(1)
+                          ->all();
+        $modelMatricula = SgdnRelMatricula::find()
+                          ->where(['PESSOA_ID' => $id_user_pessoa])
+                          ->orderBy([
+                          'DT_REGISTO' => SORT_ASC
+                          ])
+                          ->limit(1)
+                          ->all();
+
+      $modelAluguer = SgdnRelAluguer::find()
+                        ->where(['PESSOA_ID' => $id_user_pessoa])
+                        ->orderBy([
+                        'DT_REGISTO' => SORT_ASC
+                        ])
+                        ->limit(1)
+                        ->all();
+      $modelViagens = SgdnRelInscricaoViagen::find()
+                        ->where(['PESSOA_ID' => $id_user_pessoa])
+                        ->orderBy([
+                        'DT_REGISTO' => SORT_ASC
+                        ])
+                        ->limit(1)
+                        ->all();
+
+     return $this->render('dashuser', [
+         'residencias'=>$residencias,
+         'materiais' => $materiais,
+         'aulas'=> $aulas,
+         'trips'=> $trips,
+
+        //  // dashboard returns
+        'modelAlojamento'=> $modelAlojamento,
+        'modelMatricula'=> $modelMatricula,
+        'modelAluguer'=> $modelAluguer,
+        'modelViagens'=> $modelViagens
+
+     ]);
     }
 
     /**
@@ -72,7 +202,17 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+      if (Yii::$app->user->isGuest) {
+          return $this->render('index');
+      }
+
+      /*$check_pessoa = SgdnRelUserPessoa::findOne(['USER_ID'=>Yii::$app->user->identity->id]);
+      if($check_pessoa == NULL)
+      {
+        return $this->redirect(['sgdn-pessoa/create']);
+      }*/
+        return $this->redirect(['dashuser']);
+        //return $this->redirect(['sgdn-pessoa/_form']);
     }
 
     /**
@@ -86,13 +226,14 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
+
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(['index']);
         } else {
             $model->password = '';
 
-            return $this->render('login', [
+            return $this->renderAjax('login', [
                 'model' => $model,
             ]);
         }
@@ -159,7 +300,7 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('signup', [
+        return $this->renderAjax('signup', [
             'model' => $model,
         ]);
     }

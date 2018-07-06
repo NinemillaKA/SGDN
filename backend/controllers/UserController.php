@@ -104,8 +104,8 @@ class UserController extends Controller
 
         if($file){
             $generateRandomName = Yii::$app->security->generateRandomString(). '.' .$file->extension;
-            $model->url_perfil = 'img/users/'.$generateRandomName;
-            $file->saveAs('img/users/'.$generateRandomName);
+            $model->url_perfil = 'images/users/'.$generateRandomName;
+            $file->saveAs('images/users/'.$generateRandomName);
         }
 
         if ($model->load(Yii::$app->request->post()) ) {

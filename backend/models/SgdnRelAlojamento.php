@@ -11,6 +11,7 @@ use \Faker\Provider\Uuid;
  * @property string $ID
  * @property string $PESSOA_ID
  * @property string $RESIDENCIA_ID
+ * @property string $METD_PGMENT_ID
  * @property string $OBS
  * @property string $DT_ENTRADA
  * @property string $DT_SAIDA
@@ -19,6 +20,7 @@ use \Faker\Provider\Uuid;
  * @property string $ESTADO
  *
  * @property SgdnPessoa $pESSOA
+ * @property SgdnPrMetodoPagamento $mETDPGMENT
  * @property SgdnResidencia $rESIDENCIA
  */
 class SgdnRelAlojamento extends \yii\db\ActiveRecord
@@ -37,14 +39,15 @@ class SgdnRelAlojamento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'PESSOA_ID', 'RESIDENCIA_ID', 'DT_ENTRADA'], 'required'],
+            [[ 'PESSOA_ID', 'RESIDENCIA_ID','METD_PGMENT_ID', 'DT_ENTRADA'], 'required'],
             [['DT_ENTRADA', 'DT_SAIDA', 'DT_REGISTO'], 'safe'],
-            [['ID', 'PESSOA_ID', 'RESIDENCIA_ID'], 'string', 'max' => 36],
+            [['ID', 'PESSOA_ID', 'RESIDENCIA_ID', 'METD_PGMENT_ID'], 'string', 'max' => 36],
             [['OBS'], 'string', 'max' => 500],
             [['TOTAL'], 'string', 'max' => 10],
             [['ESTADO'], 'string', 'max' => 1],
             [['ID'], 'unique'],
             [['PESSOA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnPessoa::className(), 'targetAttribute' => ['PESSOA_ID' => 'ID']],
+            [['METD_PGMENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnPrMetodoPagamento::className(), 'targetAttribute' => ['METD_PGMENT_ID' => 'ID']],
             [['RESIDENCIA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnResidencia::className(), 'targetAttribute' => ['RESIDENCIA_ID' => 'ID']],
         ];
     }
@@ -58,6 +61,7 @@ class SgdnRelAlojamento extends \yii\db\ActiveRecord
             'ID' => 'ID',
             'PESSOA_ID' => 'Pessoa  ID',
             'RESIDENCIA_ID' => 'Residencia  ID',
+            'METD_PGMENT_ID' => 'Metd Pgment ID',
             'OBS' => 'Obs',
             'DT_ENTRADA' => 'Dt  Entrada',
             'DT_SAIDA' => 'Dt  Saida',
@@ -69,15 +73,24 @@ class SgdnRelAlojamento extends \yii\db\ActiveRecord
 
     /**
      * @return \yii\db\ActiveQuery
-     */
+    */
     public function getPESSOA()
     {
         return $this->hasOne(SgdnPessoa::className(), ['ID' => 'PESSOA_ID']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
+    * @return \yii\db\ActiveQuery
+    */
+
+    public function getMETDPGMENT()
+    {
+        return $this->hasOne(SgdnPrMetodoPagamento::className(), ['ID' => 'METD_PGMENT_ID']);
+    }
+
+   /**
+    * @return \yii\db\ActiveQuery
+    */
     public function getRESIDENCIA()
     {
         return $this->hasOne(SgdnResidencia::className(), ['ID' => 'RESIDENCIA_ID']);

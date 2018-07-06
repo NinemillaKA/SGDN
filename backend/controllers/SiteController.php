@@ -7,6 +7,10 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use backend\models\SgdnRelPerfil;
+use backend\models\SgdnRelAulaInstrutorModalidade;
+use backend\models\SgdmInstrutor;
+use backend\models\SgdnRelMatricula;
+use backend\models\SgdnRelAula;
 
 /**
  * Site controller
@@ -23,11 +27,11 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error','geteventoscalendar'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index','geteventoscalendar'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -54,6 +58,24 @@ class SiteController extends Controller
         ];
     }
 
+
+    /**
+    *
+    */
+    public function actionGeteventoscalendar()
+    {
+      $x = SgdnRelAula::find()->where(['ESTADO'=>'A'])->all();
+      print_r($x);
+
+      $evento =   [
+        'title'         => 'All Day Event',
+        'start'          => \Date("Y-m-d"),
+        'backgroundColor'=> '#f56954',
+        'borderColor'    => '#f56954'
+      ];
+      return json_encode($evento);
+    }
+
     /**
      * Displays homepage.
      *
@@ -61,6 +83,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
       $user_type = SgdnRelPerfil::find()->select(['DESIG'])->where('ID=:id', [ ':id' => Yii::$app->user->identity->sgdn_rel_perfil_ID ])->One();
       // var_dump($user_type);
       // Yii::$app->end();
@@ -68,11 +91,26 @@ class SiteController extends Controller
         // code...
         return $this->render('index_dash_admin');
       }elseif ($user_type['DESIG'] == 'Gestor Escola') {
-        // code...
+
+        $instrutores = SgdmInstrutor::find()->all();
+        $instructorCounter = SgdnRelAulaInstrutorModalidade::find()->select('INSTRUTOR_MODALIDADE_ID')->distinct()->count();
+
+        $alunos = SgdnRelMatricula::find()->all();
+        $alunosCounter = SgdnRelMatricula::find()->select('ALUNO_ID')->distinct()->count();
+
+
+        return $this->render('index_dash_gestor', [
+             'instructorCounter' => $instructorCounter,
+             'instrutores' => $instrutores,
+             'alunos' => $alunos,
+             'alunosCounter' => $alunosCounter
+        ]);
+
         return $this->render('index_dash_gestor');
       }else {
         return $this->render('index');
       }
+
 
     }
 

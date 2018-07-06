@@ -11,13 +11,14 @@ use \Faker\Provider\Uuid;
  * @property string $ID
  * @property string $VIAGEM_ID
  * @property string $PESSOA_ID
- * @property string $INSTRUTOR_ID
+ * @property string $METD_PGMENT_ID
  * @property string $DATA
  * @property string $DT_REGISTO
  * @property string $ESTADO
  *
  * @property SgdnPessoa $pESSOA
  * @property SgdnViagen $vIAGEM
+ * @property SgdnPrMetodoPagamento $mETDPGMENT
  */
 class SgdnRelInscricaoViagen extends \yii\db\ActiveRecord
 {
@@ -37,12 +38,12 @@ class SgdnRelInscricaoViagen extends \yii\db\ActiveRecord
         return [
             [['VIAGEM_ID'], 'required'],
             [['DT_REGISTO'], 'safe'],
-            [['ID', 'VIAGEM_ID', 'PESSOA_ID', 'INSTRUTOR_ID'], 'string', 'max' => 36],
+            [['ID', 'VIAGEM_ID', 'PESSOA_ID','METD_PGMENT_ID'], 'string', 'max' => 36],
             [['ESTADO'], 'string', 'max' => 1],
             [['ID'], 'unique'],
-            [['INSTRUTOR_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdmInstrutor::className(), 'targetAttribute' => ['INSTRUTOR_ID' => 'ID']],
-            // [['PESSOA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnPessoa::className(), 'targetAttribute' => ['PESSOA_ID' => 'ID']],
+            [['PESSOA_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnPessoa::className(), 'targetAttribute' => ['PESSOA_ID' => 'ID']],
             [['VIAGEM_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnViagen::className(), 'targetAttribute' => ['VIAGEM_ID' => 'ID']],
+            [['METD_PGMENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => SgdnPrMetodoPagamento::className(), 'targetAttribute' => ['METD_PGMENT_ID' => 'ID']],
         ];
     }
 
@@ -55,7 +56,7 @@ class SgdnRelInscricaoViagen extends \yii\db\ActiveRecord
             'ID' => 'ID',
             'VIAGEM_ID' => 'Viagem  ID',
             'PESSOA_ID' => 'Pessoa  ID',
-            // 'INSTRUTOR_ID' => 'Instrutor  ID',
+            'METD_PGMENT_ID' => 'Metd Pgment ID',
             'DATA' => 'Data',
             'DT_REGISTO' => 'Dt  Registo',
             'ESTADO' => 'Estado',
@@ -84,6 +85,13 @@ class SgdnRelInscricaoViagen extends \yii\db\ActiveRecord
     public function getVIAGEM()
     {
         return $this->hasOne(SgdnViagen::className(), ['ID' => 'VIAGEM_ID']);
+    }
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+    public function getMETDPGMENT()
+    {
+      return $this->hasOne(SgdnPrMetodoPagamento::className(), ['ID' => 'METD_PGMENT_ID']);
     }
 
     public function beforeSave($insert)

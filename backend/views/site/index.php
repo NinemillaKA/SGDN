@@ -1,6 +1,9 @@
 
+
 <?php
 /* @var $this yii\web\View */
+use backend\models\SgdnViagen;
+use backend\models\SgdnRelAluguer;
 
 $this->title = 'SGDN Application';
 ?>
@@ -14,10 +17,10 @@ $this->title = 'SGDN Application';
 
               <div class="row">
                   <div class="col-md-4">
-                      <div class="box box-warning">
+                      <div class="box box-success">
 
                         <div class="box-header with-border">
-                            <h3 class="box-title">Trips Report</h3>
+                            <h3 class="box-title">Lending Report</h3>
 
                             <div class="box-tools pull-right">
                               <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -29,11 +32,11 @@ $this->title = 'SGDN Application';
                           <div class="row">
                             <div class="col-md-6">
                               <div class="info-box">
-                                <span class="info-box-icon bg-yellow"><i class="ion ion-ios-gear-outline"></i></span>
+                                <span class="info-box-icon bg-green"><i class="ion ion-ios-gear-outline"></i></span>
 
                                 <div class="info-box-content">
-                                  <span class="info-box-text">CPU Traffic</span>
-                                  <span class="info-box-number">90<small>%</small></span>
+                                  <!-- <span class="info-box-text">CPU Traffic</span> -->
+                                  <span class="info-box-number"><h1><?= SgdnViagen::find()->where(['ESTADO'=>'A'])->count() ?></h1></span>
                                 </div>
                                 <!-- /.info-box-content -->
                                </div>
@@ -41,18 +44,18 @@ $this->title = 'SGDN Application';
                               <div class="col-md-6">
                                 <!-- /.info-box -->
                                 <div class="info-box">
-                                  <span class="info-box-icon bg-blue"><i class="fa fa-google-plus"></i></span>
+                                  <span class="info-box-icon bg-red"><iclass="fa fa-google-plus"></i></span>
 
                                   <div class="info-box-content">
-                                    <span class="info-box-text">Likes</span>
-                                    <span class="info-box-number">41,410</span>
+                                    <!-- <span class="info-box-text">Likes</span> -->
+                                    <span class="info-box-number"><h1><?= SgdnViagen::find()->where(['ESTADO'=>'I'])->count() ?></h1></span>
                                   </div>
                                   <!-- /.info-box-content -->
                                 </div>
                               </div>
                           </div>
                         <!-- /.info-box -->
-                          <div class="box box-solid bg-yellow-gradient">
+                          <div class="box box-solid bg-green-gradient">
                               <div class="box-header ui-sortable-handle" style="cursor: move;">
                                   <i class="fa fa-calendar"></i>
 
@@ -61,7 +64,7 @@ $this->title = 'SGDN Application';
                                   <div class="pull-right box-tools">
                                     <!-- button with a dropdown -->
                                     <div class="btn-group">
-                                      <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown">
+                                      <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
                                         <i class="fa fa-bars"></i></button>
                                       <ul class="dropdown-menu pull-right" role="menu">
                                         <li><a href="#">Add new event</a></li>
@@ -70,9 +73,9 @@ $this->title = 'SGDN Application';
                                         <li><a href="#">View calendar</a></li>
                                       </ul>
                                     </div>
-                                    <button type="button" class="btn btn-warning btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                                    <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
-                                    <button type="button" class="btn btn-warning btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                                    <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
                                     </button>
                                   </div>
                                   <!-- /. tools -->
@@ -92,7 +95,7 @@ $this->title = 'SGDN Application';
                                             <small class="pull-right">90%</small>
                                           </div>
                                           <div class="progress xs">
-                                            <div class="progress-bar progress-bar-yellow" style="width: 90%;"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 90%;"></div>
                                           </div>
 
                                           <div class="clearfix">
@@ -100,7 +103,7 @@ $this->title = 'SGDN Application';
                                             <small class="pull-right">70%</small>
                                           </div>
                                           <div class="progress xs">
-                                            <div class="progress-bar progress-bar-yellow" style="width: 70%;"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 70%;"></div>
                                           </div>
                                         </div>
                                         <!-- /.col -->
@@ -110,7 +113,7 @@ $this->title = 'SGDN Application';
                                             <small class="pull-right">60%</small>
                                           </div>
                                           <div class="progress xs">
-                                            <div class="progress-bar progress-bar-yellow" style="width: 60%;"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 60%;"></div>
                                           </div>
 
                                           <div class="clearfix">
@@ -118,7 +121,7 @@ $this->title = 'SGDN Application';
                                             <small class="pull-right">40%</small>
                                           </div>
                                           <div class="progress xs">
-                                            <div class="progress-bar progress-bar-yellow" style="width: 40%;"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 40%;"></div>
                                           </div>
                                         </div>
                                         <!-- /.col -->
@@ -150,8 +153,8 @@ $this->title = 'SGDN Application';
                                 <span class="info-box-icon bg-green"><i class="ion ion-ios-gear-outline"></i></span>
 
                                 <div class="info-box-content">
-                                  <span class="info-box-text">CPU Traffic</span>
-                                  <span class="info-box-number">90<small>%</small></span>
+                                  <!-- <span class="info-box-text">CPU Traffic</span> -->
+                                  <span class="info-box-number"><h1><?= SgdnRelAluguer::find()->where(['ESTADO'=>'A'])->count()?></h1></span>
                                 </div>
                                 <!-- /.info-box-content -->
                                </div>
@@ -162,8 +165,8 @@ $this->title = 'SGDN Application';
                                   <span class="info-box-icon bg-blue"><i class="fa fa-google-plus"></i></span>
 
                                   <div class="info-box-content">
-                                    <span class="info-box-text">Likes</span>
-                                    <span class="info-box-number">41,410</span>
+                                    <!-- <span class="info-box-text">Likes</span> -->
+                                    <span class="info-box-number"><h1><?= SgdnRelAluguer::find()->where(['ESTADO'=>'I'])->count()?></h1></span>
                                   </div>
                                   <!-- /.info-box-content -->
                                 </div>
@@ -268,8 +271,8 @@ $this->title = 'SGDN Application';
                               <span class="info-box-icon bg-red"><i class="ion ion-ios-gear-outline"></i></span>
 
                               <div class="info-box-content">
-                                <span class="info-box-text">CPU Traffic</span>
-                                <span class="info-box-number">90<small>%</small></span>
+                                <!-- <span class="info-box-text">CPU Traffic</span> -->
+                                <span class="info-box-number"><h1><?= SgdnRelAluguer::find()->where(['ESTADO'=>'I'])->count()?></h1></span>
                               </div>
                               <!-- /.info-box-content -->
                             </div>
@@ -280,8 +283,8 @@ $this->title = 'SGDN Application';
                                 <span class="info-box-icon bg-blue"><i class="fa fa-google-plus"></i></span>
 
                                 <div class="info-box-content">
-                                  <span class="info-box-text">Likes</span>
-                                  <span class="info-box-number">41,410</span>
+                                  <!-- <span class="info-box-text">Likes</span> -->
+                                  <span class="info-box-number"><h1><?= SgdnRelAluguer::find()->where(['ESTADO'=>'I'])->count()?></h1></span>
                                 </div>
                                 <!-- /.info-box-content -->
                               </div>
@@ -368,9 +371,6 @@ $this->title = 'SGDN Application';
                 </div>
 
             </div>
-            <?php
-
-            }?>
 
         </div>
     </div>

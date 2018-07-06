@@ -3,7 +3,7 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
-use backend\models\User;
+use common\models\User;
 
 /**
  * Login form
@@ -43,7 +43,7 @@ class LoginForm extends Model
     {
 
         if (!$this->hasErrors()) {
-            $user = $this->getUser();            
+            $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }

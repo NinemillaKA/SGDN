@@ -391,7 +391,7 @@ class SgdnMenu extends \yii\db\ActiveRecord
 
               ['ID'=>'fa-fa-bank', 'VALUE'=>'fa-bank'], // Escola
                   ['ID'=>'fa-xing', 'VALUE'=>'fa-xing'], // Modalidades
-                  ['ID'=>'fa-leanpub', 'VALUE'=>'fa-leanpub'], // Aulas
+                  ['ID'=>'fa-leanpub', 'VALUE'=>'faf fa-leanpub'], // Aulas
                   ['ID'=>'fa-calendar', 'VALUE'=>'fa-calendar'], // Calendar
                   ['ID'=>'fa-user-plus', 'VALUE'=>'fa-user-plus'], //Alunos && Instructores
 

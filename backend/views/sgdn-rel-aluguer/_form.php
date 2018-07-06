@@ -12,6 +12,8 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $model backend\models\SgdnRelAluguer */
 /* @var $form yii\widgets\ActiveForm */
+
+$total_price = 0;
 ?>
 
 <div class="sgdn-rel-aluguer-form">
@@ -112,13 +114,6 @@ use kartik\daterange\DateRangePicker;
                             </div>
                         </div>
 
-                            <!--------------------------------------------------------------------------->
-                          <!-- <div class="col-md-3" style="height: 40px">
-                                <-?= $form->field($modelSgdnRelAluger, "[{$i}]DT_ALUGUER")->textInput() ?>
-                          </div>
-                          <div class="col-md-3">
-                              <-?= $form->field($modelSgdnRelAluger, "[{$i}]DT_DEVOLUCAO")->textInput() ?>
-                          </div> -->
                           <div class="col-md-3">
                               <?=$form->field($modelSgdnRelAluger, "[{$i}]VALOR", [
                                   'addon' => [
@@ -130,9 +125,6 @@ use kartik\daterange\DateRangePicker;
                       </div>
                       <div class="row">
 
-                              <!-- <div class="col-md-3">
-                                  <-?= $form->field($modelSgdnRelAluger, "[{$i}]VALOR")->textInput() ?>
-                              </div> -->
                               <div class="col-md-5">
                                   <?= $form->field($modelSgdnRelAluger, "[{$i}]OBS")->textInput(['maxlength' => true]) ?>
                               </div>
@@ -141,7 +133,10 @@ use kartik\daterange\DateRangePicker;
                               </div>
 
                       </div>
-
+                      <?php
+                          $total_price = "[{$i}]VALOR";
+                          print_r($total_price);
+                      ?>
                   </div>
               <?php endforeach; ?>
             </div>
